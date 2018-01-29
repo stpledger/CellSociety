@@ -19,12 +19,12 @@ Below are a breakdown of each class we plan to implement, along with their insta
 
 ![imageflow](https://coursework.cs.duke.edu/CompSci308_2018Spring/cellsociety_team21/raw/master/doc/FullSizeRender-1.jpg?raw=true) 
 
+
 ```java
 class Cell{
 Shape myShape;
 String myCurrentState;
 String myNextState;
-Paint myNextColor;
 Int myXPos;
 Int myYPos;
 ArrayList<Cell> myNeighbors;
@@ -37,22 +37,46 @@ Void switchState()
 ArrayList<Cell> getNeighbors()
 Void setNeighbors(ArrayList<Cell>)
 Void setColor(Paint color)
+}
 ```
 
 ```Java
 Abstract class Grid extends HashMap<Coordinate,Cell>{
-
 Abstract void assignNeighbors()
 ArrayList<Cell> getCells()
-Void switchStates()
+Void switchStates(HashMap<String,Paint> stateColors)
+}
 ```
 
 ```Java
 Abstract class Ruleset {
-
 HashMap<String, Paint> stateColors
 
 Void updateGrid()//this calls various private helper methods to decide which cells need to change, changes them, updates their colors, etc.
+}
+```
+
+```Java
+Class display{
+Group root;
+Timeline animation;
+Scene myScene;
+
+Void updateScreen()
+Void checkUserInput()
+Void getXMLData()
+}
+```
+
+```Java
+Class driver{
+Group root;
+Timeline animation;
+Scene myScene;
+
+Void setUp()
+Void step()
+}
 ```
 
 # User Interface
@@ -63,12 +87,26 @@ The user interface will be really simple. We will have a main menu that allows a
 
 # Design Details
 
-We chose to make the cell class general enough that it does not depend on what shape or size the cells are.  This decision was made because the Grid class will have to take these things into account no matter what, and we want to isolate the code that has to change when making new simulations into as few classes as possible.  This way, we can implement new shapes by extending the Grid class without touching the Cell class.  This is reflected i
+We chose to make the cell class general enough that it does not depend on what shape or size the cells are.  This decision was made because the Grid class will have to take these things into account no matter what, and we want to isolate the code that has to change when making new simulations into as few classes as possible.  This way, we can implement new shapes by extending the Grid class without touching the Cell class.  This is reflected in the code we provided in two ways: first, myShape is of type Shape, so it can be initialized to any shape, and second, myNeighbors is a simple ArrayList, so Grid can assign those neighbors to be any number of other cells, depending on how many other cells it touches, and whether we count corners or not.  We also do not include any logic for updating state within Cell, as this will be handled by Ruleset.
+
+We chose to let Grid extend HashMap<Cell> so that it can be easily and quickly indexed, and so that it is not confined to any specific geometry.  If it was a 2D array, it could be rectangular.  It contains an abstract method setNeighbors that will add neighbors to a Cell’s myNeighbors, and this will be implemented in subclasses specific to the geometry of the grid.  It also contains the method switchStates, which applies the next states to each cell after all of the next states have been assigned.  This method takes in a map that contains states as strings and colors as values so that it can set the fill of each cell when it switches state.
+
+The abstract Ruleset class will be extended for each new simulation that we (or another developer) adds.  It will contain all of the logic for assigning a nextState to a cell based on the currentState of it and its neighbors.  For simplicity, we have chosen to give it only one public method, which will step the entire grid forward into its next evolution.  This method can be called from driver either once to move one step, or periodically to “animate” the simulation.  The public method will rely on many internal private methods that help it determine its next state.  Some of these methods will be assigned as abstract methods in the Ruleset super class, if they are a method that would be required by any ruleset.  For methods that are only required by some rulesets, they will only be implemented in the subclasses.
 
 
 # Design Considerations
+**Whether Cell should be extended**
+**Whether Grid should be extended**
+**How to store cells in the grid**
+* Hashmap
+    * Pros-
+    * Cons-
+* 2D Array
+    * Pros-
+    * Cons-
 
-
+**How myNeighbors is stored within Cell**
+**How to pass new Color to Cell**
 
 # Team Responsibilities
 
@@ -77,3 +115,11 @@ Scott Pledger- Cell class, Grid superclass, & Grid subclasses
 Ben Auriemma- Ruleset superclass & Ruleset subclasses
 
 This is the general separation of work that we are going to start with, but if any one member is overwhelmed with the work they have been assigned, then a member who has a lighter workload will help once they have completed their work. The general order we are looking to complete the project in is: XML input, Driver class, Cell class, Grid superclass and subclasses, Ruleset superclass and subclasses, GUI/Display class. However, we are going to get the barebone of each component done first so that things are up and running enough to test as we work to complete the various parts.
+
+# Use cases
+
+Apply rules to middle and edge cells
+ * To apply these rules, we will use the step function in driver to call an update function from the Game of Life ruleset class which follows the logic of the ruleset which will update the entire grid with both the middle and edge cells
+* After all cells are updated from the function, we will pass that information into a display class that shows all the graphical visualizations including the GUI. The display class will loop through all the information (from a hashmap) of the grid and visualize each individual cell.
+* From the XML, we will read it in through the driver class that then sends the information to the setUp() function in the driver class which uses the information to initialize it.
+* To change the simulation, the user has to hit menu to go back to the main menu and then choose a new simulation to execute.
