@@ -95,21 +95,21 @@ The abstract Ruleset class will be extended for each new simulation that we (or 
 
 
 # Design Considerations
-**Whether Cell should be a superclass**
+####Whether Cell should be a superclass
 * Superclass
     * Pros- Easy to create a new subclass if a new type of cell is needed
     * Cons- Cell must hold its size and shape and grid changes based on these values
     
 **Decision: Not superclass because it allows for more cell flexibility**
     
-**Whether Grid should be a superclass**
+####Whether Grid should be a superclass
 * Superclass
     * Pros- Grid subclasses specify the way in which the grid is constructed based on size and shape of the cell
     * Cons- Need to make new subclasses if there are just small changes to the way neighbors are defined or the grid is structured
     
 **Decision: Superclass because grid should be flexible based on the cell's characteristics. A grid superclass and a cell class is more flexible than a grid class and cell superclass.**
 
-**How to store cells in the grid**
+####How to store cells in the grid
 * Hashmap
     * Pros- Scalable and only contains information on cells with information, not empty cells
     * Cons- Have to design a flexible hashcode algorithm in case parts of the grid change
@@ -119,7 +119,7 @@ The abstract Ruleset class will be extended for each new simulation that we (or 
     
 **Decision: Hashmap for flexibility**
 
-**How myNeighbors is stored within Cell**
+####How myNeighbors is stored within Cell
 * Array
     * Pros- Easy access and iterable
     * Cons- Size is contstant
@@ -129,7 +129,7 @@ The abstract Ruleset class will be extended for each new simulation that we (or 
     
 **Decision: Arraylist because it is more flexible in size**    
         
-**How to pass new Color to Cell**
+####How to pass new Color to Cell
 * Pass from Grid subclass
     * Pros- Direct relationship with cells it will apply the colors too
     * Cons- Have to update the grid based on the states and colors in each simulation
