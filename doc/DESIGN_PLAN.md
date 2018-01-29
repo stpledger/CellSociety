@@ -119,10 +119,17 @@ This is the general separation of work that we are going to start with, but if a
 # Use cases
 
 Apply rules to middle and edge cells
+
 * To apply these rules, we will use the step function in driver to call an update function from the Game of Life ruleset class which follows the logic of the ruleset which will update the entire grid with both the middle and edge cells
+
 Move to the next generation
+
 * After all cells are updated from the function, we will pass that information into a display class that shows all the graphical visualizations including the GUI. The display class will loop through all the information (from a hashmap) of the grid and visualize each individual cell.
+
 Set a simulation parameter
+
 * From the XML, we will read it in through the driver class that then sends the information to the setUp() function in the driver class which uses the information to initialize it.
+
 Switch simulations
+
 * To change the simulation, the user has to hit menu to go back to the main menu and then choose a new simulation to execute.
