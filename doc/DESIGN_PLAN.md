@@ -96,8 +96,11 @@ The abstract Ruleset class will be extended for each new simulation that we (or 
 
 # Design Considerations
 **Whether Cell should be extended**
+
 **Whether Grid should be extended**
+
 **How to store cells in the grid**
+
 * Hashmap
     * Pros-
     * Cons-
@@ -110,9 +113,9 @@ The abstract Ruleset class will be extended for each new simulation that we (or 
 
 # Team Responsibilities
 
-Harry Wang- XML input, GUI/Display class, Driver class
-Scott Pledger- Cell class, Grid superclass, & Grid subclasses
-Ben Auriemma- Ruleset superclass & Ruleset subclasses
+* Harry Wang- XML input, GUI/Display class, Driver class
+* Scott Pledger- Cell class, Grid superclass, & Grid subclasses
+* Ben Auriemma- Ruleset superclass & Ruleset subclasses
 
 This is the general separation of work that we are going to start with, but if any one member is overwhelmed with the work they have been assigned, then a member who has a lighter workload will help once they have completed their work. The general order we are looking to complete the project in is: XML input, Driver class, Cell class, Grid superclass and subclasses, Ruleset superclass and subclasses, GUI/Display class. However, we are going to get the barebone of each component done first so that things are up and running enough to test as we work to complete the various parts.
 
