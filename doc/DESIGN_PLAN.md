@@ -17,7 +17,7 @@ The program will be started by a Driver class that takes in the user's XML input
 
 Below are a breakdown of each class we plan to implement, along with their instance variable and their public methods.  The reasons for each of these choices is described in the Design Details section.
 
-![imageflow](/img/FullSizeRender-1.jpg | width=300) 
+![imageflow](FullSizeRender-1.jpg | width=300) 
 
 ```java
 class Cell{
@@ -59,7 +59,7 @@ Void updateGrid()//this calls various private helper methods to decide which cel
 
 The user interface will be really simple. We will have a main menu that allows a user to select the starting inputs for the simulation (i.e. which XML file and which ruleset to follow). Then the display will turn into the simulation and there will be buttons/toolbars to toggle between speeds of the simulation and size of simulation as well as a pause and a back button to return to the main menu. We will try and limit the number of ways a user could give bad inputs into the project (for example speed: -10), by setting the button/toolbars to reflect this. Also, if the program was given bad input or bad data, it will print out an error message on the display and reset back to the main menu instead of crashing. 
 
-![UI](/img/FullSizeRender.jpg | width=300) 
+![UI](FullSizeRender.jpg | width=300) 
 
 # Design Details
 
