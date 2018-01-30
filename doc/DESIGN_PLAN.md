@@ -25,34 +25,34 @@ class Cell{
 Shape myShape;
 String myCurrentState;
 String myNextState;
-Int myXPos;
-Int myYPos;
+int myXPos;
+int myYPos;
 ArrayList<Cell> myNeighbors;
 
 Shape getShape()
 String getCurrentState()
 String getNextState()
-Void setNextState()
-Void switchState()
+void setNextState()
+void switchState()
 ArrayList<Cell> getNeighbors()
-Void setNeighbors(ArrayList<Cell>)
-Void setColor(Paint color)
+void setNeighbors(ArrayList<Cell>)
+void setColor(Paint color)
 }
 ```
 
 ```java
-Abstract class Grid extends HashMap<Coordinate,Cell>{
-Abstract void assignNeighbors()
+abstract class Grid extends HashMap<Coordinate,Cell>{
+abstract void assignNeighbors()
 ArrayList<Cell> getCells()
-Void switchStates(HashMap<String,Paint> stateColors)
+void switchStates(HashMap<String,Paint> stateColors)
 }
 ```
 
 ```java
-Abstract class Ruleset {
+abstract class Ruleset {
 HashMap<String, Paint> stateColors
 
-Void updateGrid()//this calls various private helper methods to decide which cells need to change, changes them, updates their colors, etc.
+void updateGrid()//this calls various private helper methods to decide which cells need to change, changes them, updates their colors, etc.
 }
 ```
 
@@ -62,9 +62,9 @@ Group root;
 Timeline animation;
 Scene myScene;
 
-Void updateScreen()
-Void checkUserInput()
-Void getXMLData()
+void updateScreen()
+void checkUserInput()
+void getXMLData()
 }
 ```
 
@@ -74,8 +74,8 @@ Group root;
 Timeline animation;
 Scene myScene;
 
-Void setUp()
-Void step()
+void setUp()
+void step()
 }
 ```
 
