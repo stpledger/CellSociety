@@ -40,7 +40,7 @@ Void setColor(Paint color)
 }
 ```
 
-```Java
+```java
 Abstract class Grid extends HashMap<Coordinate,Cell>{
 Abstract void assignNeighbors()
 ArrayList<Cell> getCells()
@@ -48,7 +48,7 @@ Void switchStates(HashMap<String,Paint> stateColors)
 }
 ```
 
-```Java
+```java
 Abstract class Ruleset {
 HashMap<String, Paint> stateColors
 
@@ -56,7 +56,7 @@ Void updateGrid()//this calls various private helper methods to decide which cel
 }
 ```
 
-```Java
+```java
 Class display{
 Group root;
 Timeline animation;
@@ -68,7 +68,7 @@ Void getXMLData()
 }
 ```
 
-```Java
+```java
 Class driver{
 Group root;
 Timeline animation;
@@ -87,9 +87,9 @@ The user interface will be really simple. We will have a main menu that allows a
 
 # Design Details
 
-We chose to make the cell class general enough that it does not depend on what shape or size the cells are.  This decision was made because the Grid class will have to take these things into account no matter what, and we want to isolate the code that has to change when making new simulations into as few classes as possible.  This way, we can implement new shapes by extending the Grid class without touching the Cell class.  This is reflected in the code we provided in two ways: first, myShape is of type Shape, so it can be initialized to any shape, and second, myNeighbors is a simple ArrayList, so Grid can assign those neighbors to be any number of other cells, depending on how many other cells it touches, and whether we count corners or not.  We also do not include any logic for updating state within Cell, as this will be handled by Ruleset.
+We chose to make the cell class general enough that it does not depend on what shape or size the cells are.  This decision was made because the Grid class will have to take these things into account no matter what, and we want to isolate the code that has to change when making new simulations into as few classes as possible.  This way, we can implement new shapes by extending the Grid class without touching the Cell class.  This choice is reflected in the code we provided in two ways: first, myShape is of type Shape, so it can be initialized to any shape, and second, myNeighbors is a simple ArrayList, so Grid can assign those neighbors to be any number of other cells, depending on how many other cells it touches, and whether we count corners or not.  We also do not include any logic for updating state within Cell, as this will be handled by Ruleset.
 
-We chose to let Grid extend HashMap<Cell> so that it can be easily and quickly indexed, and so that it is not confined to any specific geometry.  If it was a 2D array, it could be rectangular.  It contains an abstract method setNeighbors that will add neighbors to a Cell’s myNeighbors, and this will be implemented in subclasses specific to the geometry of the grid.  It also contains the method switchStates, which applies the next states to each cell after all of the next states have been assigned.  This method takes in a map that contains states as strings and colors as values so that it can set the fill of each cell when it switches state.
+We chose to let Grid extend HashMap<Cell> so that it can be easily and quickly indexed, and so that it is not confined to any specific geometry.  If the cells were instead stored as a 2-D array, the grid could only be rectangular.  Grid contains an abstract method setNeighbors that will add neighbors to a Cell’s myNeighbors, and this will be implemented in subclasses specific to the geometry of the grid.  It also contains the method switchStates, which applies the next states to each cell after all of the next states have been assigned.  This method takes in a map that contains states as the keys and colors as the values so that it can set the fill of each cell when it switches state.
 
 The abstract Ruleset class will be extended for each new simulation that we (or another developer) adds.  It will contain all of the logic for assigning a nextState to a cell based on the currentState of it and its neighbors.  For simplicity, we have chosen to give it only one public method, which will step the entire grid forward into its next evolution.  This method can be called from driver either once to move one step, or periodically to “animate” the simulation.  The public method will rely on many internal private methods that help it determine its next state.  Some of these methods will be assigned as abstract methods in the Ruleset super class, if they are a method that would be required by any ruleset.  For methods that are only required by some rulesets, they will only be implemented in the subclasses.
 
@@ -122,10 +122,10 @@ The abstract Ruleset class will be extended for each new simulation that we (or 
 #### How myNeighbors is stored within Cell
 * Array
     * Pros- Easy access and iterable
-    * Cons- Size is contstant
+    * Cons- Size is constant
 * Arraylist
     * Pros- Scalable and iterable
-    * Cons- 
+    * Cons- Slower than Array
     
 **Decision: Arraylist because it is more flexible in size**    
         
@@ -152,11 +152,11 @@ This is the general separation of work that we are going to start with, but if a
 
 Apply rules to middle and edge cells
 
-* To apply these rules, we will use the step function in driver to call an update function from the Game of Life ruleset class which follows the logic of the ruleset which will update the entire grid with both the middle and edge cells
+* To apply these rules, we will use the step method in driver to call an update method from the Game of Life ruleset class.  The GOLRuleset class will iterate through each cell contained in the Grid class, and use the logic written in GOLRuleset to assign each cell's myNextState.  Each cell's neighbors are found by iterating over myNeighbors, which can be any side.
 
 Move to the next generation
 
-* After all cells are updated from the function, we will pass that information into a display class that shows all the graphical visualizations including the GUI. The display class will loop through all the information (from a hashmap) of the grid and visualize each individual cell.
+* After all cells' myNextState are set, the switchStates method in Grid assigns each cell's myCurrentState to the value of myNextState, sets myNextState to null, and sets its fill to a new color based on the map passed in from GOLRuleset.
 
 Set a simulation parameter
 
@@ -164,4 +164,4 @@ Set a simulation parameter
 
 Switch simulations
 
-* To change the simulation, the user has to hit menu to go back to the main menu and then choose a new simulation to execute.
+* To change the simulation, the user has to hit menu to go back to the main menu and then choose a new simulation to execute.  The Display class handles the mouse input and sends it to the Driver class which initializes and runs a new simulation.
