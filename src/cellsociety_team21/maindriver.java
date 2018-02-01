@@ -1,16 +1,19 @@
 package cellsociety_team21;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -24,6 +27,7 @@ public class maindriver extends Application{
 	private Group root;
 	private Scene scene;
 	private GridPane pane;
+	private Desktop desktop = Desktop.getDesktop();
 	
 	public static void main(String[] args) {
 		Application.launch(args);
@@ -59,22 +63,32 @@ public class maindriver extends Application{
         hbox.setAlignment(Pos.BOTTOM_RIGHT);
         hbox.getChildren().add(calculateButton);
         pane.add(splash, 0, 0, 2, 1);
-        pane.add(hbox, 1, 4);        
+        pane.add(hbox, 1, 4);      
+        FileChooser filechooser = new FileChooser();
         calculateButton.setOnAction(new EventHandler<ActionEvent>() {
- 
             public void handle(ActionEvent event) {
                 System.out.println("Hello World");
             }
         });
         fileSelector.setOnAction(new EventHandler<ActionEvent>() {
         		public void handle(ActionEvent event) {
-        			System.out.println("file chooser");
+        			File file = filechooser.showOpenDialog(stage);
+        			if(file != null) {
+        				openFile(file);
+        			}
         		}
         });
         pane.add(file, 0, 4);
         stage.setScene(scene);
         stage.show();
 	}
+	private void openFile(File file) {
+        try {
+            desktop.open(file);
+        } catch (IOException ex) {
+            System.out.println("rip");
+        }
+    }
 	
 	
 }
