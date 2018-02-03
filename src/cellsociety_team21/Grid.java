@@ -7,11 +7,18 @@ import java.util.HashMap;
 import javafx.scene.paint.Paint;
 
 public abstract class Grid extends HashMap<Point, Cell>{
+	private HashMap<Point, Cell> cellMap;
 	
 	public abstract void assignNeighbors();
 	
-	public abstract ArrayList<Cell> getCells();
+	public ArrayList<Cell> getCells(){
+		return new ArrayList<Cell>(cellMap.values());
+	}
 	
-	public abstract void switchStates(HashMap<String,Paint> stateColors);
+	public void switchStates(HashMap<String,Paint> stateColors){
+		for(Cell cell : cellMap.values()){
+			cell.switchState();
+		}
+	}
 	
 }
