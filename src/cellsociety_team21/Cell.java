@@ -1,11 +1,12 @@
 package cellsociety_team21;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
-public  class Cell {
+public class Cell {
 	
 	private Shape myShape;
 	private String myCurrentState;
@@ -13,7 +14,13 @@ public  class Cell {
 	private int myXPos;
 	private int myYPos;
 	private ArrayList<Cell> myNeighbors;
-
+	
+	public Cell(Shape shape, String initState, int x, int y){
+		myShape = shape;
+		myCurrentState = initState;
+		myXPos = x;
+		myYPos = y;
+	}
 
 	public Shape getShape(){
 		return myShape;
@@ -53,11 +60,11 @@ public  class Cell {
 		myYPos = y;
 	}
 	
-	public int getXLocation(){
+	public int getX(){
 		return myXPos;
 	}
 	
-	public int getYLocation(){
+	public int getY(){
 		return myYPos;
 	}
 
