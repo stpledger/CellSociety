@@ -1,5 +1,6 @@
 package visuals;
 
+import XML.*;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +26,12 @@ public class Gui {
 	private Scene scene;
 	private Desktop desktop;
 	private Stage stage;
+	private int width;
+	private int height;
 	
 	public Gui(Stage stage) {
 		this.stage = stage;
-		desktop = Desktop.getDesktop();
+		this.desktop = Desktop.getDesktop();
 		this.pane = new GridPane();
 		pane.setAlignment(Pos.CENTER);
 	    pane.setHgap(10);
@@ -39,14 +42,14 @@ public class Gui {
 	    Text splash = new Text("Main Menu");
 	    splash.setFont(Font.font("Arial", FontWeight.NORMAL,20));
 	
-	    Label total = new Label("Width:");
-	    pane.add(total, 0, 1);
-	    final TextField width = new TextField();
-	    pane.add(width, 1, 1);
-	    Label percent = new Label("Height:");
-	    pane.add(percent,0,2);
-	    final TextField height = new TextField();
-	    pane.add(height, 1, 2);
+	    Label widthLabel = new Label("Width:");
+	    pane.add(widthLabel, 0, 1);
+	    final TextField widthText = new TextField();
+	    pane.add(widthText, 1, 1);
+	    Label heightLabel = new Label("Height:");
+	    pane.add(heightLabel,0,2);
+	    final TextField heightText = new TextField();
+	    pane.add(heightText, 1, 2);
 	
 	    Button calculateButton = new Button("Simulation");
 	    Button fileSelector = new Button("File");
@@ -61,7 +64,9 @@ public class Gui {
 	    FileChooser filechooser = new FileChooser();
 	    calculateButton.setOnAction(new EventHandler<ActionEvent>() {
 	        public void handle(ActionEvent event) {
-	            System.out.println("Hello World");
+	        		if(!widthText.getText().equals("")) width = Integer.parseInt(widthText.getText());
+	        		if(!heightText.getText().equals("")) height = Integer.parseInt(heightText.getText());
+	        		System.out.println(width);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {
@@ -69,17 +74,17 @@ public class Gui {
 	    			File file = filechooser.showOpenDialog(stage);
 	    			if(file != null) {
 	    				openFile(file);
+	    				widthText.setText(Integer.toString(width));
+	    				heightText.setText(Integer.toString(height));
 	    			}
 	    		}
 	    });
 	    pane.add(file, 0, 4);
 	}
 	private void openFile(File file) {
-        try {
-            desktop.open(file);
-        } catch (IOException ex) {
-            System.out.println("rip");
-        }
+        XMLParser parsed = new XMLParser(file);
+        width = parsed.getData().getWidthInt();
+        height = parsed.getData().getHeightInt();
     }
 	public Scene getScene() {
 		return scene;

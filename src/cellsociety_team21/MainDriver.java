@@ -6,7 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class maindriver extends Application{
+public class MainDriver extends Application{
 	private static final String TITLE = "Cell Society Team 21";
 	
 	public static void main(String[] args) {

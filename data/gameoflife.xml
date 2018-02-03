@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data gameType="GameOfLife">
+<title>Game of Life</title>
+<width>10</width>
+<height>10</height>
+</data>
