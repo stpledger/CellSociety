@@ -2,7 +2,6 @@ package cellsociety_team21;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 
