@@ -54,7 +54,7 @@ public class SegregationRuleset extends SimpleMoveRuleset {
 			if(neighbor.getCurrentState()!="empty") {
 				nonEmptyNeighbors++;
 			}
-			if(neighbor.getCurrentState()==cell.getCurrentState()) {
+			if(neighbor.getCurrentState().equals(cell.getCurrentState())) {
 				sameNeighbors++;
 			}
 		}
@@ -66,4 +66,3 @@ public class SegregationRuleset extends SimpleMoveRuleset {
 	}
 
 }
-
