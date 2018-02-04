@@ -10,7 +10,7 @@ import javafx.scene.paint.Paint;
 public class GOLRuleset extends Ruleset {
 
 	GOLRuleset(){
-		super(new ArrayList<String>(),new HashMap<String, Paint>());
+		super();
 		this.getStates().add("alive");
 		this.getStates().add("dead");
 		this.getStateColors().put("alive", Color.GREEN);
@@ -27,7 +27,7 @@ public class GOLRuleset extends Ruleset {
 
 	void assignNext(Cell c) {
 		if(c.getCurrentState().equals("alive")) {
-			if(c.getNeighbors.size()<2 || c.getNeighbors.size()>3) {
+			if(c.getNeighbors().size()<2 || c.getNeighbors().size()>3) {
 				c.setNextState("dead");
 			}
 			else {
@@ -35,7 +35,7 @@ public class GOLRuleset extends Ruleset {
 			}
 		}
 		else if(c.getCurrentState().equals("dead")){
-			if(c.getNeighbors.size()==3) {
+			if(c.getNeighbors().size()==3) {
 				c.setNextState("alive");
 			}
 			else {
