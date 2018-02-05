@@ -22,7 +22,7 @@ public abstract class Grid {
 	}
 	
 	public void switchStates(HashMap<String,Paint> stateColors){
-		for(Cell cell : cellMap.values()){
+		for(Cell cell : this.getCells()){
 			cell.switchState();
 		}
 	}
