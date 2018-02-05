@@ -12,7 +12,9 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 	 */
 	protected void assignNext(Cell cell, Grid grid) {
 		if(cell.getCurrentState().equals("empty")) {
-			cell.setNextState("empty");
+			if(cell.getNextState()==null) {
+				cell.setNextState("empty");
+			}
 			return;
 		}
 		if(isSatisfied(cell)) {
@@ -33,11 +35,6 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 	 */
 	protected void moveCell(Cell cell, Grid grid) {
 		for(Cell c : grid.getCells()) {
-			c.getCurrentState().equals("empty");
-			//c.getNextState()==null;
-			//c.getNextState().equals("empty");
-			//c.getNextState().equals("");
-			//c.getNextState().equals(null);
 			if(c.getCurrentState().equals("empty") && (c.getNextState()==null || c.getNextState().equals("empty"))) {
 				c.setNextState(cell.getCurrentState());
 				cell.setNextState("empty");
