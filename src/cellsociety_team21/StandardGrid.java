@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 public class StandardGrid extends Grid{
 	private HashMap<Point, Cell> cellMap;
 	
-	StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
+	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
 		cellMap = new HashMap<Point, Cell>();
 		for (int i = 0; i < row; i++){
 			for (int j = 0; j < col; j++){
