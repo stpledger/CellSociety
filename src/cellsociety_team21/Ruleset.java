@@ -20,7 +20,7 @@ public abstract class Ruleset {
 	 * @param states possible in this simulation
 	 * @param stateColors , keys are all possible states, and their values are what color they should be displayed as
 	 */
-	Ruleset(){
+	public Ruleset(){
 		myStates = new ArrayList<String>();
 		myStateColors = new HashMap<String, Paint>();
 	}
