@@ -29,6 +29,12 @@ public class Gui {
 	private int width;
 	private int height;
 	private String gameType;
+	private static final String main = "Main Menu";
+	private static final String widthText = "Width:";
+	private static final String heightText = "Height:";
+	private static final String SIM = "Simulation";
+	private static final String FILE = "File";
+	private static final int SIZE = 450;
 	
 	public Gui(Stage stage) {
 		this.stage = stage;
@@ -38,29 +44,33 @@ public class Gui {
 	    pane.setHgap(10);
 	    pane.setVgap(10);
 	    
-	    this.scene = new Scene(pane, 450, 450);
-	
-	    Text splash = new Text("Main Menu");
+	    this.scene = new Scene(pane, SIZE, SIZE);
+	    
+	    
+	    Text splash = new Text(main);
 	    splash.setFont(Font.font("Arial", FontWeight.NORMAL,20));
+	    Text sim = new Text();
+	    sim.setFont(Font.font("Arial", FontWeight.NORMAL,20));
 	
-	    Label widthLabel = new Label("Width:");
+	    Label widthLabel = new Label(widthText);
 	    pane.add(widthLabel, 0, 1);
 	    final TextField widthText = new TextField();
 	    pane.add(widthText, 1, 1);
-	    Label heightLabel = new Label("Height:");
+	    Label heightLabel = new Label(heightText);
 	    pane.add(heightLabel,0,2);
 	    final TextField heightText = new TextField();
 	    pane.add(heightText, 1, 2);
 	
-	    Button calculateButton = new Button("Simulation");
-	    Button fileSelector = new Button("File");
+	    Button calculateButton = new Button(SIM);
+	    Button fileSelector = new Button(FILE);
 	    HBox file = new HBox(10);
 	    file.setAlignment(Pos.CENTER);
 	    file.getChildren().add(fileSelector);
 	    HBox hbox = new HBox(10);
 	    hbox.setAlignment(Pos.BOTTOM_RIGHT);
 	    hbox.getChildren().add(calculateButton);
-	    pane.add(splash, 0, 0, 2, 1);
+	    pane.add(splash, 0, 0);
+	    pane.add(sim, 1, 0);
 	    pane.add(hbox, 1, 4);      
 	    pane.add(file, 0, 4);
 	    FileChooser filechooser = new FileChooser();
@@ -82,6 +92,7 @@ public class Gui {
 	    				openFile(file);
 	    				widthText.setText(Integer.toString(width));
 	    				heightText.setText(Integer.toString(height));
+	    				sim.setText(gameType);
 	    			}
 	    		}
 	    });
