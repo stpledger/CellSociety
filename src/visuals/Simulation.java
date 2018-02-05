@@ -10,12 +10,14 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -24,6 +26,7 @@ public class Simulation {
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private GridPane pane;
+    private Group root;
     private Stage stage;
     private Scene scene;
     private String gameType;
@@ -44,20 +47,30 @@ public class Simulation {
 		setUpSim();
 	}
 	private void setUpSim() {
-		pause = false;
 		pane.getChildren().clear();
+		pause = false;
+		root = new Group();
+		scene = new Scene(root, 600, 600, Color.ALICEBLUE);
+		stage.setScene(scene);
+		stage.show();
+		
 		Button mainMenu = new Button("Main");
-		pane.setAlignment(Pos.TOP_LEFT);
-		pane.add(mainMenu, 0, 1);
+		mainMenu.setLayoutX(0);
+		mainMenu.setLayoutY(0);
+		root.getChildren().add(mainMenu);
 		Button start = new Button("Start");
-		pane.add(start,  0, 2);
+		start.setLayoutX(0);
+		start.setLayoutY(50);
+		root.getChildren().add(start);
 		Button stop = new Button("Stop");
-		pane.add(stop, 0, 3);
+		stop.setLayoutX(0);
+		stop.setLayoutY(100);
+		root.getChildren().add(stop);
 		ruleset = new GOLRuleset();
 		initGrid();
 		mainMenu.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				animation.stop();
+				if(animation!=null)animation.stop();
 				Gui restart = new Gui(stage);
 				Scene scene = restart.getScene();
 		        stage.setScene(scene);
@@ -91,19 +104,23 @@ public class Simulation {
 			if(a==1)initStates.add("alive");
 			else initStates.add("dead");
 		}
-		double cellSize = 10.0;//NEED TO RUN THROUGH THIS
+		double cellSize = 50.0;
 		HashMap<String, Paint> colors = ruleset.getStateColors();
 		grid = new StandardGrid(height, width, initStates, cellSize, colors);
 		HashMap<Point, Cell> map = grid.getCellMap();
 		for(Point c: map.keySet()) {
 			System.out.println(c.x+" "+c.y);
-			pane.add(map.get(c).getShape(), c.x, c.y);
+			System.out.println(map.get(c).getX()+50+" "+map.get(c).getY()+50);
+			Shape temp = map.get(c).getShape();
+			temp.setLayoutX(map.get(c).getX()+50);
+			temp.setLayoutY(map.get(c).getY()+50);
+			root.getChildren().add(temp);
+			
 		}
-		//Rectangle test = new Rectangle(10,10);
-		//pane.add(test, 3, 1);
 	}
 	private void step(double secondDelay) {
 		if(pause)return;
+		System.out.println("running");
 		ruleset.updateGrid(grid);
 	}
 }
