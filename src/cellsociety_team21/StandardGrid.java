@@ -9,11 +9,17 @@ import javafx.scene.shape.Rectangle;
 public class StandardGrid extends Grid{
 	private HashMap<Point, Cell> cellMap; 
 	
-	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
+	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors, boolean Diag){
 		this.cellMap = new HashMap<Point, Cell>();
 		updateGrid(row, col, initStates, cellSize, colors);
-		assignNeighborsDiag();
+		if (Diag){
+			assignNeighborsDiag();
+		}
+		else{
+			assignNeighborsNoDiag();
+		}
 	}
+	
 	private void updateGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors) {
 		for (int i = 0; i < row; i++){
 			for (int j = 0; j < col; j++){
@@ -30,7 +36,6 @@ public class StandardGrid extends Grid{
 	}
 	
 	public void switchStates(HashMap<String,Paint> stateColors){
-		System.out.print("Updated");
 		for(Cell cell : getCells()){
 			cell.switchState(stateColors);
 		}
@@ -39,6 +44,7 @@ public class StandardGrid extends Grid{
 	public HashMap<Point, Cell> getCellMap(){
 		return cellMap;
 	}
+	
 	public void assignNeighborsDiag(){
 		for (Point myPoint : cellMap.keySet()){
 			ArrayList<Cell> neighbors = new ArrayList<Cell>();
