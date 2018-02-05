@@ -1,9 +1,12 @@
 package cellsociety_team21;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public abstract class SimpleMoveRuleset extends Ruleset {
 
 	abstract protected boolean isSatisfied(Cell cell);
-	
+
 	/**
 	 * If a cell is empty, set its next state to empty.  This might be changed later
 	 * If a cell is satisfied, set its next state to its current state
@@ -12,7 +15,9 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 	 */
 	protected void assignNext(Cell cell, Grid grid) {
 		if(cell.getCurrentState().equals("empty")) {
-			cell.setNextState("empty");
+			if(cell.getNextState()==null) {
+				cell.setNextState("empty");
+			}
 			return;
 		}
 		if(isSatisfied(cell)) {
@@ -22,7 +27,7 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 			moveCell(cell, grid);
 		}
 	}
-	
+
 	/**
 	 * This method is used to move an unsatisfied cell to a vacant location
 	 * First, set its next to empty
@@ -32,14 +37,21 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 	 * @param grid is used to get the list of other cells
 	 */
 	protected void moveCell(Cell cell, Grid grid) {
+		ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 		for(Cell c : grid.getCells()) {
-			if(c.getCurrentState().equals("empty") && (c.getNextState().equals("empty") || c.getNextState().equals("") || c.getNextState().equals(null))) {
-				c.setNextState(cell.getCurrentState());
-				cell.setNextState("empty");
-				return;
+			if(c.getCurrentState().equals("empty") && (c.getNextState()==null || c.getNextState().equals("empty"))) {
+				potentialDestinations.add(c);
 			}
 		}
-		throw new IllegalArgumentException("An unsatisfied cell could not be moved");
+		if(potentialDestinations.size()>0) {
+			Cell destination = potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
+			destination.setNextState(cell.getCurrentState());
+			cell.setNextState("empty");
+			System.out.println("moved cell");
+		}
+		else {
+			throw new IllegalArgumentException("An unsatisfied cell could not be moved");
+		}
 	}
-	
+
 }

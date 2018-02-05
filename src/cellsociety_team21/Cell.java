@@ -33,6 +33,10 @@ public class Cell {
 		return myNextState;
 	}
 	
+	public void setCurrentState(String state){
+		myCurrentState = state;
+	}
+	
 	public void setNextState(String state){
 		myNextState = state;
 	}
@@ -50,6 +54,10 @@ public class Cell {
 	public void setNeighbors(ArrayList<Cell> neighbors){
 		System.out.println("About to give cell a list of neighbors");
 		myNeighbors = neighbors;
+	}
+	
+	public void addNeighbor(Cell neighbor){
+		myNeighbors.add(neighbor);
 	}
 	
 	public void setColor(Paint color){
