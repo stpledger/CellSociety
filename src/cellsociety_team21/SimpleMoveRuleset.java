@@ -1,5 +1,8 @@
 package cellsociety_team21;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public abstract class SimpleMoveRuleset extends Ruleset {
 
 	abstract protected boolean isSatisfied(Cell cell);
@@ -34,15 +37,21 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 	 * @param grid is used to get the list of other cells
 	 */
 	protected void moveCell(Cell cell, Grid grid) {
+		ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 		for(Cell c : grid.getCells()) {
 			if(c.getCurrentState().equals("empty") && (c.getNextState()==null || c.getNextState().equals("empty"))) {
-				c.setNextState(cell.getCurrentState());
-				cell.setNextState("empty");
-				System.out.println("moved cell");
-				return;
+				potentialDestinations.add(c);
 			}
 		}
-		throw new IllegalArgumentException("An unsatisfied cell could not be moved");
+		if(potentialDestinations.size()>0) {
+			Cell destination = potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
+			destination.setNextState(cell.getCurrentState());
+			cell.setNextState("empty");
+			System.out.println("moved cell");
+		}
+		else {
+			throw new IllegalArgumentException("An unsatisfied cell could not be moved");
+		}
 	}
 
 }
