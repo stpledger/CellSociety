@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -35,11 +35,16 @@ public class Gui {
 	private static final String SIM = "Simulation";
 	private static final String SIMULATION = "Sim: ";
 	private static final String FILE = "File";
+	private static final String NOFILE = "Choose an XML File";
+	private static final String FONT = "Arial";
 	private static final int SIZE = 450;
 	private double probCatch;
 	private int fireX;
 	private int fireY;
 	private double ratio;
+	private int startEnergy;
+	private int reproduction;
+	private int fishEnergy;
 	
 	public Gui(Stage stage) {
 		this.stage = stage;
@@ -53,10 +58,9 @@ public class Gui {
 	    
 	    
 	    Text splash = new Text(main);
-	    splash.setFont(Font.font("Arial", FontWeight.NORMAL,20));
+	    splash.setFont(Font.font(FONT, FontWeight.NORMAL,20));
 	    Text sim = new Text(SIMULATION);
-	    sim.setFont(Font.font("Arial", FontWeight.NORMAL,20));
-	
+	    sim.setFont(Font.font(FONT, FontWeight.NORMAL,20));
 	    Label widthLabel = new Label(widthText);
 	    pane.add(widthLabel, 0, 1);
 	    final TextField widthText = new TextField();
@@ -84,10 +88,10 @@ public class Gui {
 	        		if(!widthText.getText().equals("")) width = Integer.parseInt(widthText.getText());
 	        		if(!heightText.getText().equals("")) height = Integer.parseInt(heightText.getText());
 	        		if(gameType == null) {
-	        			System.out.println("please choose an xml file");//output some form of error
+	        			sim.setText(SIMULATION+NOFILE);
 	        			return;
 	        		}
-	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY, ratio);
+	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY, ratio, startEnergy, reproduction, fishEnergy);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {
@@ -121,6 +125,13 @@ public class Gui {
         		height = parsed.getSegData().getHeightInt();
         		gameType = parsed.getSegData().getGameType();
         		ratio = parsed.getSegData().getRatio();
+        }else if(parsed.whichGame().equals("Wator")) {
+        		width = parsed.getWatorData().getWidthInt();
+        		height = parsed.getWatorData().getHeightInt();
+        		gameType = parsed.getWatorData().getGameType();
+        		startEnergy = parsed.getWatorData().getStartEnergy();
+        		reproduction = parsed.getWatorData().getReproduction();
+        		fishEnergy = parsed.getWatorData().getFishEnergy();
         }
     }
 	public Scene getScene() {
