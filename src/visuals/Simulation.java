@@ -13,6 +13,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -52,8 +53,8 @@ public class Simulation {
 		pane.add(start,  0, 2);
 		Button stop = new Button("Stop");
 		pane.add(stop, 0, 3);
-		initGrid();
 		ruleset = new GOLRuleset();
+		initGrid();
 		mainMenu.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				animation.stop();
@@ -90,7 +91,7 @@ public class Simulation {
 			if(a==1)initStates.add("alive");
 			else initStates.add("dead");
 		}
-		double cellSize = 1.0;//NEED TO RUN THROUGH THIS
+		double cellSize = 10.0;//NEED TO RUN THROUGH THIS
 		HashMap<String, Paint> colors = ruleset.getStateColors();
 		grid = new StandardGrid(height, width, initStates, cellSize, colors);
 		HashMap<Point, Cell> map = grid.getCellMap();
@@ -98,8 +99,8 @@ public class Simulation {
 			System.out.println(c.x+" "+c.y);
 			pane.add(map.get(c).getShape(), c.x, c.y);
 		}
-		Rectangle test = new Rectangle(10,10);
-		pane.add(test, 3, 1);
+		//Rectangle test = new Rectangle(10,10);
+		//pane.add(test, 3, 1);
 	}
 	private void step(double secondDelay) {
 		if(pause)return;
