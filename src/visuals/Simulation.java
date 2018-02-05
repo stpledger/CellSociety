@@ -27,6 +27,7 @@ public class Simulation {
     private static final int BUTTONHEIGHT = 50;
     private static final Color BACKGROUND = Color.ALICEBLUE;
     private static final String GAMEOFLIFE = "GameOfLife";
+    private static final String FIRE = "Fire";
     private static final String MAIN = "Main";
     private static final String START = "Start";
     private static final String STOP = "Stop";
@@ -44,9 +45,13 @@ public class Simulation {
     private StandardGrid grid;
     private int SIZEW;
     private int SIZEH;
+    private double probCatch;
+    private int fireX;
+    private int fireY;
+    private boolean diag;
     
 
-	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height) {
+	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y) {
 		this.SIZEW = ((int)CELLSIZE*width)+2*BUTTONHEIGHT;
 		this.SIZEH = ((int)CELLSIZE*height)+2*BUTTONHEIGHT;
 		this.pane = pane;
@@ -55,6 +60,10 @@ public class Simulation {
 		this.gameType = gameType;
 		this.width = width;
 		this.height = height;
+		this.probCatch = probCatch;
+		this.fireX = x;
+		this.fireY = y;
+		this.diag = true;
 		setUpSim();
 	}
 	private Button buttonMaker(String text, double x, double y) {
@@ -116,10 +125,13 @@ public class Simulation {
 		if(gameType == GAMEOFLIFE) {
 			initStates = GoLStates(initStates);
 			ruleset = new GOLRuleset();
+		}else if(gameType == FIRE) {
+			initStates = FireStates(initStates);
+			ruleset = new FireRuleset(probCatch);
 		}
 		//add other gametypes
 		HashMap<String, Paint> colors = ruleset.getStateColors();
-		grid = new StandardGrid(width, height, initStates, CELLSIZE, colors);
+		grid = new StandardGrid(width, height, initStates, CELLSIZE, colors, diag);
 		HashMap<Point, Cell> map = grid.getCellMap();
 		for(Point c: map.keySet()) {
 			Shape temp = map.get(c).getShape();
@@ -128,6 +140,14 @@ public class Simulation {
 			root.getChildren().add(temp);
 			
 		}
+	}
+	private ArrayList<String> FireStates(ArrayList<String> init){
+		int total = width*height;
+		for(int i=0;i<=total+1;i++) {
+			if(i==fireX*fireY)init.add("burning");
+			init.add("tree");
+		}
+		return init;
 	}
 	private ArrayList<String> GoLStates(ArrayList<String> init){
 		int total = width*height;

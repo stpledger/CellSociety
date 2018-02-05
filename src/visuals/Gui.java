@@ -33,8 +33,12 @@ public class Gui {
 	private static final String widthText = "Width:";
 	private static final String heightText = "Height:";
 	private static final String SIM = "Simulation";
+	private static final String SIMULATION = "Sim: ";
 	private static final String FILE = "File";
 	private static final int SIZE = 450;
+	private double probCatch;
+	private int fireX;
+	private int fireY;
 	
 	public Gui(Stage stage) {
 		this.stage = stage;
@@ -49,7 +53,7 @@ public class Gui {
 	    
 	    Text splash = new Text(main);
 	    splash.setFont(Font.font("Arial", FontWeight.NORMAL,20));
-	    Text sim = new Text();
+	    Text sim = new Text(SIMULATION);
 	    sim.setFont(Font.font("Arial", FontWeight.NORMAL,20));
 	
 	    Label widthLabel = new Label(widthText);
@@ -82,7 +86,7 @@ public class Gui {
 	        			System.out.println("please choose an xml file");//output some form of error
 	        			return;
 	        		}
-	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height);
+	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {
@@ -92,16 +96,26 @@ public class Gui {
 	    				openFile(file);
 	    				widthText.setText(Integer.toString(width));
 	    				heightText.setText(Integer.toString(height));
-	    				sim.setText(gameType);
+	    				sim.setText(SIMULATION + gameType);
 	    			}
 	    		}
 	    });
 	}
 	private void openFile(File file) {
         XMLParser parsed = new XMLParser(file);
-        width = parsed.getData().getWidthInt();
-        height = parsed.getData().getHeightInt();
-        gameType = parsed.getData().getGameType();
+        if(parsed.whichGame().equals("GameOfLife")) {
+        		width = parsed.getGOLData().getWidthInt();
+        		height = parsed.getGOLData().getHeightInt();
+        		gameType = parsed.getGOLData().getGameType();
+        }
+        else if(parsed.whichGame().equals("Fire")) {
+        		width = parsed.getFireData().getWidthInt();
+        		height = parsed.getFireData().getHeightInt();
+        		gameType = parsed.getFireData().getGameType();
+        		probCatch = parsed.getFireData().getProbCatch();
+        		fireX = parsed.getFireData().getFireX();
+        		fireY = parsed.getFireData().getFireY();
+        }
     }
 	public Scene getScene() {
 		return scene;

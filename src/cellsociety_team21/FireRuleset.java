@@ -10,10 +10,10 @@ import javafx.scene.paint.Paint;
 
 public class FireRuleset extends Ruleset {
 
-	private static final double DEFAULT_PROB_CATCH = 0.5;
+	//private static final double DEFAULT_PROB_CATCH = 0.5;
 	private static double myProbCatch;
 	
-	FireRuleset(double probCatch){
+	public FireRuleset(double probCatch){
 		super();
 		this.getStates().add("burning");
 		this.getStates().add("tree");
@@ -24,9 +24,9 @@ public class FireRuleset extends Ruleset {
 		myProbCatch = probCatch;
 	}
 	
-	FireRuleset(){
+	/*FireRuleset(){
 		this(DEFAULT_PROB_CATCH);
-	}
+	}*/
 
 	@Override
 	public void updateGrid(Grid grid) {
