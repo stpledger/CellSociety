@@ -1,5 +1,6 @@
 package visuals;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -13,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -83,9 +85,22 @@ public class Simulation {
 	private void initGrid() {
 		ArrayList<String> initStates = new ArrayList<String>();
 		int total = width*height;
+		for(int i=0;i<total;i++) {
+			int a = (int) Math.round(Math.random());
+			if(a==1)initStates.add("alive");
+			else initStates.add("dead");
+		}
 		double cellSize = 1.0;//NEED TO RUN THROUGH THIS
 		HashMap<String, Paint> colors = new HashMap<String, Paint>();
 		grid = new StandardGrid(height, width, initStates, cellSize, colors);
+		HashMap<Point, Cell> map = grid.getCellMap();
+		for(Point c: map.keySet()) {
+			System.out.println(c.x);
+			System.out.println(c.y);
+			pane.add(map.get(c).getShape(), map.get(c).getX(), map.get(c).getY());
+		}
+		Rectangle test = new Rectangle(10,10);
+		pane.add(test, 3, 1);
 	}
 	private void step(double secondDelay) {
 		if(pause)return;
