@@ -3,6 +3,8 @@ package cellsociety_team21;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.scene.paint.Color;
+
 public class WaTorRuleset extends Ruleset {
 
 	private static final int DEFAULT_START_ENERGY = 3;
@@ -17,6 +19,12 @@ public class WaTorRuleset extends Ruleset {
 		myStartEnergy = startEnergy;
 		myReproductionTime = reproductionTime;
 		myEnergyPerFish = energyPerFish;
+		this.getStates().add("water");
+		this.getStates().add("fish");
+		this.getStates().add("shark");
+		this.getStateColors().put("water", Color.AQUA);
+		this.getStateColors().put("fish", Color.CORAL);
+		this.getStateColors().put("shark", Color.DARKGRAY);
 	}
 
 	WaTorRuleset(){
@@ -24,7 +32,7 @@ public class WaTorRuleset extends Ruleset {
 	}
 
 	@Override
-	public void updateGrid(Grid grid) {
+	public void updateGrid(WaTorGrid grid) {
 		for(WaTorCell cell : grid.getCells()) {
 			assignNext(cell);
 		}
