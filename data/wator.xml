@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data gameType="Wator">
+<title>Wator Simulation</title>
+<width>10</width>
+<height>10</height>
+<startEnergy>3</startEnergy>
+<reproduction>3</reproduction>
+<energyFish>2</energyFish>
+</data>

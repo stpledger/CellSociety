@@ -25,9 +25,11 @@ public class Simulation {
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
     private static final double CELLSIZE = 50.0;
     private static final int BUTTONHEIGHT = 50;
+    private static final int BUTTONHEIGHTPAD = BUTTONHEIGHT+10;
     private static final Color BACKGROUND = Color.ALICEBLUE;
     private static final String GAMEOFLIFE = "GameOfLife";
     private static final String SEGREGATION = "Segregation";
+    private static final String WATOR = "Wator";
     private static final String FIRE = "Fire";
     private static final String MAIN = "Main";
     private static final String START = "Start";
@@ -52,9 +54,12 @@ public class Simulation {
     private boolean diag;
     private double ratio;
     private int TOTAL;
+    private int startEnergy;
+    private int reproduction;
+    private int fishEnergy;
     
 
-	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio) {
+	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio, int sEnergy, int repro, int fEnergy) {
 		this.SIZEW = ((int)CELLSIZE*width)+2*BUTTONHEIGHT;
 		this.SIZEH = ((int)CELLSIZE*height)+2*BUTTONHEIGHT;
 		this.pane = pane;
@@ -69,6 +74,9 @@ public class Simulation {
 		this.diag = true;
 		this.ratio = ratio;
 		this.TOTAL = width*height;
+		this.startEnergy = sEnergy;
+		this.reproduction = repro;
+		this.fishEnergy = fEnergy;
 		setUpSim();
 	}
 	private Button buttonMaker(String text, double x, double y) {
@@ -127,26 +135,37 @@ public class Simulation {
 	}
 	private void initGrid() {
 		ArrayList<String> initStates = new ArrayList<String>();
-		if(gameType == GAMEOFLIFE) {
+		if(gameType.equals(GAMEOFLIFE)) {
 			initStates = GoLStates(initStates);
 			ruleset = new GOLRuleset();
-		}else if(gameType == FIRE) {
+		}else if(gameType.equals(FIRE)) {
 			initStates = FireStates(initStates);
 			ruleset = new FireRuleset(probCatch);
-		}else if(gameType ==SEGREGATION) {
+		}else if(gameType.equals(SEGREGATION)) {
 			initStates = SegStates(initStates);
 			ruleset = new SegregationRuleset(ratio);
+		}else if(gameType.equals(WATOR)) {
+			initStates = WatorStates(initStates);
+			ruleset = new WaTorRuleset(startEnergy, reproduction, fishEnergy);
 		}
-		//add other gametypes
 		HashMap<String, Paint> colors = ruleset.getStateColors();
-		grid = new StandardGrid(width, height, initStates, CELLSIZE, colors, diag);
+		grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
 		HashMap<Point, Cell> map = grid.getCellMap();
 		for(Point c: map.keySet()) {
 			Shape temp = map.get(c).getShape();
-			temp.setLayoutX(map.get(c).getX()+60);
-			temp.setLayoutY(map.get(c).getY()+50);
+			temp.setLayoutX(map.get(c).getX()+BUTTONHEIGHTPAD);
+			temp.setLayoutY(map.get(c).getY()+BUTTONHEIGHT);
 			root.getChildren().add(temp);
 		}
+	}
+	private ArrayList<String> WatorStates(ArrayList<String> init){
+		for(int i=0;i<=TOTAL+1;i++) {
+			int a = (int)(Math.random()*5);
+			if(a==0)init.add("fish");
+			if(a==1)init.add("shark");
+			else init.add("water");
+		}
+		return init;
 	}
 	private ArrayList<String> SegStates(ArrayList<String> init){
 		for(int i=0;i<=TOTAL+1;i++) {

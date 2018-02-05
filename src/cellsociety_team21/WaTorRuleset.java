@@ -14,11 +14,11 @@ public class WaTorRuleset extends Ruleset {
 	private static final int DEFAULT_ENERGY_PER_FISH = 2;
 	private static int myEnergyPerFish;
 
-	WaTorRuleset(int startEnergy, int reproductionTime, int energyPerFish){
+	public WaTorRuleset(int startEnergy, int reproductionTime, int energyPerFish){
 		super();
-		myStartEnergy = startEnergy;
-		myReproductionTime = reproductionTime;
-		myEnergyPerFish = energyPerFish;
+		this.myStartEnergy = startEnergy;
+		this.myReproductionTime = reproductionTime;
+		this.myEnergyPerFish = energyPerFish;
 		this.getStates().add("water");
 		this.getStates().add("fish");
 		this.getStates().add("shark");

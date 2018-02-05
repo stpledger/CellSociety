@@ -18,17 +18,22 @@ public class XMLParser {
 	private static final String GOL = "GameOfLife";
 	private static final String FIRE = "Fire";
 	private static final String SEGREGATION = "Segregation";
+	private static final String WATOR = "Wator";
 	private static final String GAMETYPE = "gameType";
 	private static final String TITLE = "title";
 	private static final String WIDTH = "width";
 	private static final String HEIGHT = "height";
 	private static final String RATIO = "ratio";
 	private static final String CATCHFIREPROBABILITY = "probCatch";
+	private static final String STARTENERGY = "startEnergy";
+	private static final String REPRODUCTION = "reproduction";
+	private static final String ENERGYFISH = "energyFish";
 	private static int FIRST = 0;
 	private static String whichGame;
-	GoLData gol;
-	FireData fire;
-	SegregationData seg;
+	private GoLData gol;
+	private FireData fire;
+	private SegregationData seg;
+	private WatorData wator;
 	
 	public XMLParser(File file) {
 		this.file = file;
@@ -76,6 +81,15 @@ public class XMLParser {
 						String ratio = eElement.getElementsByTagName(RATIO).item(FIRST).getTextContent();
 						seg = new SegregationData(SEGREGATION, title, width, height, ratio);
 						//segregation has been parsed, need to add that into simulation/GUI
+					}else if(eElement.getAttribute(GAMETYPE).equals(WATOR)) {
+						whichGame = WATOR;
+						String title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
+						String width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						String height = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						String sEnergy = eElement.getElementsByTagName(STARTENERGY).item(FIRST).getTextContent();
+						String repro = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						String fEnergy = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						wator = new WatorData(WATOR, title, width, height, sEnergy, repro, fEnergy);
 					}
 				} catch (SAXException e) {
 					e.printStackTrace();
@@ -100,5 +114,9 @@ public class XMLParser {
 	public SegregationData getSegData() {
 		if(seg!=null) return seg;
 		return null;//change this later since we don't want nulls
+	}
+	public WatorData getWatorData() {
+		if(wator!=null) return wator;
+		return null;
 	}
 }
