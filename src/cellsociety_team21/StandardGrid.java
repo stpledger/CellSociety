@@ -9,15 +9,15 @@ import javafx.scene.shape.Rectangle;
 public class StandardGrid extends Grid{
 	private HashMap<Point, Cell> cellMap;
 	
-	StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
-		cellMap = new HashMap<Point, Cell>();
+	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
+		this.cellMap = new HashMap<Point, Cell>();
 		for (int i = 0; i < row; i++){
 			for (int j = 0; j < col; j++){
 				Point point = new Point(i, j);
 				int x = i * (int) cellSize;
 				int y = j * (int) cellSize;
 				Cell cell = new Cell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
-				cellMap.put(point, cell);
+				this.cellMap.put(point, cell);
 			}
 		}
 	}

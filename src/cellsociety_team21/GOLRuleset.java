@@ -9,7 +9,7 @@ import javafx.scene.paint.Paint;
 
 public class GOLRuleset extends Ruleset {
 
-	GOLRuleset(){
+	public GOLRuleset(){
 		super();
 		this.getStates().add("alive");
 		this.getStates().add("dead");
