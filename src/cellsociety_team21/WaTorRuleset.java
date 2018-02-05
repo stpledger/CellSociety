@@ -120,10 +120,10 @@ public class WaTorRuleset extends Ruleset {
 					cell.setNextState("shark");
 					cell.setNextTimeTilReproduction(cell.getCurrentTimeTilReproduction()-1);
 					if(fishAvailable) {
-						cell.setNextEnergy(cell.getCurrentEnergy+1);
+						cell.setNextEnergy(cell.getCurrentEnergy()+1);
 					}
 					else {
-						cell.setNextEnergy(cell.getCurrentEnergy-1);
+						cell.setNextEnergy(cell.getCurrentEnergy()-1);
 					}
 				}
 			}
