@@ -28,6 +28,7 @@ public class Gui {
 	private Stage stage;
 	private int width;
 	private int height;
+	private String gameType;
 	
 	public Gui(Stage stage) {
 		this.stage = stage;
@@ -36,7 +37,7 @@ public class Gui {
 		pane.setAlignment(Pos.CENTER);
 	    pane.setHgap(10);
 	    pane.setVgap(10);
-	    pane.setPadding(new Insets(25, 25, 25, 25));
+	    
 	    this.scene = new Scene(pane, 450, 450);
 	
 	    Text splash = new Text("Main Menu");
@@ -61,12 +62,17 @@ public class Gui {
 	    hbox.getChildren().add(calculateButton);
 	    pane.add(splash, 0, 0, 2, 1);
 	    pane.add(hbox, 1, 4);      
+	    pane.add(file, 0, 4);
 	    FileChooser filechooser = new FileChooser();
 	    calculateButton.setOnAction(new EventHandler<ActionEvent>() {
 	        public void handle(ActionEvent event) {
 	        		if(!widthText.getText().equals("")) width = Integer.parseInt(widthText.getText());
 	        		if(!heightText.getText().equals("")) height = Integer.parseInt(heightText.getText());
-	        		System.out.println(width);
+	        		if(gameType == null) {
+	        			System.out.println("please choose an xml file");//output some form of error
+	        			return;
+	        		}
+	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {
@@ -79,12 +85,12 @@ public class Gui {
 	    			}
 	    		}
 	    });
-	    pane.add(file, 0, 4);
 	}
 	private void openFile(File file) {
         XMLParser parsed = new XMLParser(file);
         width = parsed.getData().getWidthInt();
         height = parsed.getData().getHeightInt();
+        gameType = parsed.getData().getGameType();
     }
 	public Scene getScene() {
 		return scene;

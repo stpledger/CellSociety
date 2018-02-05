@@ -17,7 +17,7 @@ public class StandardGrid extends Grid{
 				int x = i * (int) cellSize;
 				int y = j * (int) cellSize;
 				Cell cell = new Cell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
-				cellMap.put(point, cell);
+				this.cellMap.put(point, cell);
 			}
 		}
 	}
