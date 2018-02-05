@@ -10,14 +10,13 @@ import javafx.scene.paint.Paint;
 public class SegregationRuleset extends SimpleMoveRuleset {
 
 
-	private static final double DEFAULT_T_RATIO = 0.3;
 	private static double myTRatio;
 
 	/**
 	 * Constructor for SegregationRuleset class
 	 * @param tRatio is the portion of a cell's neighbors that have to be the same as it to be satisfied
 	 */
-	SegregationRuleset(double tRatio) {
+	public SegregationRuleset(double tRatio) {
 		super();
 		this.getStates().add("empty");
 		this.getStates().add("x");
@@ -25,15 +24,12 @@ public class SegregationRuleset extends SimpleMoveRuleset {
 		this.getStateColors().put("x", Color.BLUE);
 		this.getStateColors().put("o", Color.RED);
 		this.getStateColors().put("empty", Color.GREY);
-		myTRatio = tRatio;
+		this.myTRatio = tRatio;
 	}
 
 	/**
 	 * The 0-argument constructor uses a hardcoded T ratio 0.3. This can be changed in the SegregationRuleset class
 	 */
-	SegregationRuleset() {
-		this(DEFAULT_T_RATIO);
-	}
 
 	public void updateGrid(Grid grid) {
 		for(Cell cell : grid.getCells()) {

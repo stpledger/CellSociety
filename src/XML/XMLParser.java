@@ -17,15 +17,18 @@ public class XMLParser {
 	private static final String DATA = "data";
 	private static final String GOL = "GameOfLife";
 	private static final String FIRE = "Fire";
+	private static final String SEGREGATION = "Segregation";
 	private static final String GAMETYPE = "gameType";
 	private static final String TITLE = "title";
 	private static final String WIDTH = "width";
 	private static final String HEIGHT = "height";
+	private static final String RATIO = "ratio";
 	private static final String CATCHFIREPROBABILITY = "probCatch";
 	private static int FIRST = 0;
 	private static String whichGame;
 	GoLData gol;
 	FireData fire;
+	SegregationData seg;
 	
 	public XMLParser(File file) {
 		this.file = file;
@@ -65,6 +68,14 @@ public class XMLParser {
 						String initFireY = eElement.getElementsByTagName("startFireY").item(FIRST).getTextContent();
 						fire = new FireData(FIRE, title, width, height, probCatch, initFireX, initFireY);
 						//return life;
+					}else if(eElement.getAttribute(GAMETYPE).equals(SEGREGATION)) {
+						whichGame = SEGREGATION;
+						String title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
+						String width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						String height = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						String ratio = eElement.getElementsByTagName(RATIO).item(FIRST).getTextContent();
+						seg = new SegregationData(SEGREGATION, title, width, height, ratio);
+						//segregation has been parsed, need to add that into simulation/GUI
 					}
 				} catch (SAXException e) {
 					e.printStackTrace();
@@ -84,6 +95,10 @@ public class XMLParser {
 	}
 	public FireData getFireData() {
 		if(fire!=null) return fire;
+		return null;//change this later since we don't want nulls
+	}
+	public SegregationData getSegData() {
+		if(seg!=null) return seg;
 		return null;//change this later since we don't want nulls
 	}
 }

@@ -27,6 +27,7 @@ public class Simulation {
     private static final int BUTTONHEIGHT = 50;
     private static final Color BACKGROUND = Color.ALICEBLUE;
     private static final String GAMEOFLIFE = "GameOfLife";
+    private static final String SEGREGATION = "Segregation";
     private static final String FIRE = "Fire";
     private static final String MAIN = "Main";
     private static final String START = "Start";
@@ -49,9 +50,11 @@ public class Simulation {
     private int fireX;
     private int fireY;
     private boolean diag;
+    private double ratio;
+    private int TOTAL;
     
 
-	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y) {
+	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio) {
 		this.SIZEW = ((int)CELLSIZE*width)+2*BUTTONHEIGHT;
 		this.SIZEH = ((int)CELLSIZE*height)+2*BUTTONHEIGHT;
 		this.pane = pane;
@@ -64,6 +67,8 @@ public class Simulation {
 		this.fireX = x;
 		this.fireY = y;
 		this.diag = true;
+		this.ratio = ratio;
+		this.TOTAL = width*height;
 		setUpSim();
 	}
 	private Button buttonMaker(String text, double x, double y) {
@@ -128,6 +133,9 @@ public class Simulation {
 		}else if(gameType == FIRE) {
 			initStates = FireStates(initStates);
 			ruleset = new FireRuleset(probCatch);
+		}else if(gameType ==SEGREGATION) {
+			initStates = SegStates(initStates);
+			ruleset = new SegregationRuleset(ratio);
 		}
 		//add other gametypes
 		HashMap<String, Paint> colors = ruleset.getStateColors();
@@ -135,23 +143,29 @@ public class Simulation {
 		HashMap<Point, Cell> map = grid.getCellMap();
 		for(Point c: map.keySet()) {
 			Shape temp = map.get(c).getShape();
-			temp.setLayoutX(map.get(c).getX()+50);
+			temp.setLayoutX(map.get(c).getX()+60);
 			temp.setLayoutY(map.get(c).getY()+50);
 			root.getChildren().add(temp);
-			
 		}
 	}
+	private ArrayList<String> SegStates(ArrayList<String> init){
+		for(int i=0;i<=TOTAL+1;i++) {
+			int a = (int)(Math.random()*3);
+			if(a==0)init.add("empty");
+			if(a==1)init.add("x");
+			else init.add("o");
+		}
+		return init;
+	}
 	private ArrayList<String> FireStates(ArrayList<String> init){
-		int total = width*height;
-		for(int i=0;i<=total+1;i++) {
+		for(int i=0;i<=TOTAL+1;i++) {
 			if(i==fireX*fireY)init.add("burning");
 			init.add("tree");
 		}
 		return init;
 	}
 	private ArrayList<String> GoLStates(ArrayList<String> init){
-		int total = width*height;
-		for(int i=0;i<=total+1;i++) {
+		for(int i=0;i<=TOTAL+1;i++) {
 			int a = (int) Math.round(Math.random());
 			if(a==1)init.add("alive");
 			else init.add("dead");
