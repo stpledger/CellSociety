@@ -18,19 +18,19 @@ public class WaTorCell extends Cell {
 		this.myCurrentTimeTilReproduction = initRepro;
 	}
 	
-	public int getMyCurrentEnergy(){
+	public int getCurrentEnergy(){
 		return myCurrentEnergy;
 	}
 	
-	public int getMyCurrentTimeTilReproduction(){
+	public int getCurrentTimeTilReproduction(){
 		return myCurrentTimeTilReproduction;
 	}
 	
-	public void setMyNextEnergy(int nextEnergy){
+	public void setNextEnergy(int nextEnergy){
 		myNextEnergy = nextEnergy;
 	}
 	
-	public void setMyNextTimeTilReproduction(int nextRepro){
+	public void setNextTimeTilReproduction(int nextRepro){
 		myNextTimeTilReproduction = nextRepro;
 	}
 	
