@@ -6,23 +6,18 @@ import java.util.HashMap;
 
 import javafx.scene.paint.Paint;
 
-public abstract class Grid extends HashMap<Point, Cell>{
-	private HashMap<Point, Cell> cellMap;
+
+public abstract class Grid {
 	
 	public abstract void assignNeighborsDiag();
 	
 	public abstract void assignNeighborsNoDiag();
 	
-	public ArrayList<Cell> getCells(){
-		return new ArrayList<Cell>(cellMap.values());
-	}
+	public abstract ArrayList<Cell> getCells();
 	
-	public void switchStates(HashMap<String,Paint> stateColors){
-		for(Cell cell : this.getCells()){
-			cell.switchState();
-		}
-	}
+
+	public abstract HashMap<Point, Cell> getCellMap();
 	
-	
-	
+	public abstract void switchStates(HashMap<String,Paint> stateColors);
+
 }
