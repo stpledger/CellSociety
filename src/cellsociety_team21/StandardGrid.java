@@ -9,15 +9,14 @@ import javafx.scene.shape.Rectangle;
 public class StandardGrid extends Grid{
 	private HashMap<Point, Cell> cellMap; 
 	
-	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors, boolean Diag){
+	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
 		this.cellMap = new HashMap<Point, Cell>();
 		updateGrid(row, col, initStates, cellSize, colors);
-		if (Diag){
-			assignNeighborsDiag();
-		}
-		else{
-			assignNeighborsNoDiag();
-		}
+		assignNeighborsNoDiag();
+	}
+	
+	public StandardGrid(){
+		this.cellMap = new HashMap<Point, Cell>();
 	}
 	
 	private void updateGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors) {
@@ -43,21 +42,6 @@ public class StandardGrid extends Grid{
 	
 	public HashMap<Point, Cell> getCellMap(){
 		return cellMap;
-	}
-	
-	public void assignNeighborsDiag(){
-		for (Point myPoint : cellMap.keySet()){
-			ArrayList<Cell> neighbors = new ArrayList<Cell>();
-			for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i++){
-				for (int j = (int) myPoint.getY() - 1; j < (int) myPoint.getY() + 2; j++){
-					Point neighborsPoint = new Point(i, j);
-					if (cellMap.containsKey(neighborsPoint) && !neighborsPoint.equals(myPoint)){
-						neighbors.add(cellMap.get(new Point(i,j)));
-					}
-				}
-			}
-			cellMap.get(myPoint).setNeighbors(neighbors);
-		}
 	}
 	
 	public void assignNeighborsNoDiag(){
