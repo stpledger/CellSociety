@@ -37,9 +37,10 @@ public class Cell {
 		myNextState = state;
 	}
 	
-	public void switchState(){
+	public void switchState(HashMap<String, Paint> stateColors){
 		myCurrentState = myNextState;
 		myNextState = null;
+		getShape().setFill(stateColors.get(myCurrentState));
 	}
 	
 	public ArrayList<Cell> getNeighbors(){
