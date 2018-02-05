@@ -18,7 +18,7 @@ public abstract class Grid extends HashMap<Point, Cell>{
 	}
 	
 	public void switchStates(HashMap<String,Paint> stateColors){
-		for(Cell cell : cellMap.values()){
+		for(Cell cell : this.getCells()){
 			cell.switchState();
 		}
 	}

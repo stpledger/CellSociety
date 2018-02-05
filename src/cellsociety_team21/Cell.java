@@ -15,10 +15,10 @@ public class Cell {
 	private ArrayList<Cell> myNeighbors;
 	
 	public Cell(Shape shape, String initState, int x, int y){
-		myShape = shape;
-		myCurrentState = initState;
-		myXPos = x;
-		myYPos = y;
+		this.myShape = shape;
+		this.myCurrentState = initState;
+		this.myXPos = x;
+		this.myYPos = y;
 	}
 
 	public Shape getShape(){

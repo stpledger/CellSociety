@@ -12,6 +12,7 @@ public class StandardGrid extends Grid{
 	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
 		this.cellMap = new HashMap<Point, Cell>();
 		updateGrid(row, col, initStates, cellSize, colors);
+		assignNeighborsDiag();
 	}
 	private void updateGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors) {
 		for (int i = 0; i < row; i++){
