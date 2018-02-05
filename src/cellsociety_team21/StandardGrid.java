@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class StandardGrid extends Grid{
-	private HashMap<Point, Cell> cellMap;
+	private HashMap<Point, Cell> cellMap; 
 	
 	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
 		this.cellMap = new HashMap<Point, Cell>();
@@ -27,6 +27,12 @@ public class StandardGrid extends Grid{
 	}
 	public ArrayList<Cell> getCells(){
 		return new ArrayList<Cell>(cellMap.values());
+	}
+	
+	public void switchStates(HashMap<String,Paint> stateColors){
+		for(Cell cell : getCells()){
+			cell.switchState();
+		}
 	}
 	
 	public HashMap<Point, Cell> getCellMap(){
