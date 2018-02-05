@@ -47,6 +47,7 @@ public class Cell {
 	}
 	
 	public void setNeighbors(ArrayList<Cell> neighbors){
+		System.out.println("About to give cell a list of neighbors");
 		myNeighbors = neighbors;
 	}
 	
