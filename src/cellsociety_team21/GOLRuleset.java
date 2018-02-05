@@ -25,9 +25,15 @@ public class GOLRuleset extends Ruleset {
 		grid.switchStates(this.getStateColors());
 	}
 
-	void assignNext(Cell c) {
+	private void assignNext(Cell c) {
+		int liveNeighbors = 0;
+		for(Cell neighbor : c.getNeighbors()) {
+			if(neighbor.getCurrentState().equals("alive")) {
+				liveNeighbors++;
+			}
+		}
 		if(c.getCurrentState().equals("alive")) {
-			if(c.getNeighbors().size()<2 || c.getNeighbors().size()>3) {
+			if(liveNeighbors<2 || liveNeighbors>3) {
 				c.setNextState("dead");
 			}
 			else {
@@ -35,7 +41,7 @@ public class GOLRuleset extends Ruleset {
 			}
 		}
 		else if(c.getCurrentState().equals("dead")){
-			if(c.getNeighbors().size()==3) {
+			if(liveNeighbors==3) {
 				c.setNextState("alive");
 			}
 			else {
