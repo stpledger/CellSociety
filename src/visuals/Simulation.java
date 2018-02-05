@@ -9,22 +9,28 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Simulation {
-	public static final int FRAMES_PER_SECOND = 1;
+	public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+    private static final double CELLSIZE = 50.0;
+    private static final int BUTTONHEIGHT = 50;
+    private static final Color BACKGROUND = Color.ALICEBLUE;
+    private static final String GAMEOFLIFE = "GameOfLife";
+    private static final String MAIN = "Main";
+    private static final String START = "Start";
+    private static final String STOP = "Stop";
+    private static final String RESET = "Reset";
     private GridPane pane;
     private Group root;
     private Stage stage;
@@ -36,8 +42,13 @@ public class Simulation {
     private boolean pause;
     private Ruleset ruleset;
     private StandardGrid grid;
+    private int SIZEW;
+    private int SIZEH;
+    
 
 	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height) {
+		this.SIZEW = ((int)CELLSIZE*width)+2*BUTTONHEIGHT;
+		this.SIZEH = ((int)CELLSIZE*height)+2*BUTTONHEIGHT;
 		this.pane = pane;
 		this.stage = stage;
 		this.scene = scene;
@@ -46,27 +57,24 @@ public class Simulation {
 		this.height = height;
 		setUpSim();
 	}
+	private Button buttonMaker(String text, double x, double y) {
+		Button temp = new Button(text);
+		temp.setLayoutX(x);
+		temp.setLayoutY(y);
+		return temp;
+	}
 	private void setUpSim() {
-		pane.getChildren().clear();
 		pause = false;
+		pane.getChildren().clear();
 		root = new Group();
-		scene = new Scene(root, 600, 600, Color.ALICEBLUE);
+		scene = new Scene(root, SIZEW, SIZEH, BACKGROUND);
 		stage.setScene(scene);
 		stage.show();
-		
-		Button mainMenu = new Button("Main");
-		mainMenu.setLayoutX(0);
-		mainMenu.setLayoutY(0);
-		root.getChildren().add(mainMenu);
-		Button start = new Button("Start");
-		start.setLayoutX(0);
-		start.setLayoutY(50);
-		root.getChildren().add(start);
-		Button stop = new Button("Stop");
-		stop.setLayoutX(0);
-		stop.setLayoutY(100);
-		root.getChildren().add(stop);
-		ruleset = new GOLRuleset();
+		Button mainMenu = buttonMaker(MAIN, 0, 0);
+		Button start = buttonMaker(START, 0, BUTTONHEIGHT);
+		Button stop = buttonMaker(STOP, 0, BUTTONHEIGHT*2);
+		Button reset = buttonMaker(RESET, 0, BUTTONHEIGHT*3);
+		root.getChildren().addAll(mainMenu, start, stop, reset);
 		initGrid();
 		mainMenu.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
@@ -79,6 +87,7 @@ public class Simulation {
 		});
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				pause = false;
 				KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
 		                e -> step(SECOND_DELAY));
 				if(animation!=null) {
@@ -95,22 +104,24 @@ public class Simulation {
 				pause = true;
 			}
 		});
+		reset.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				setUpSim();
+				pause = true;
+			}
+		});
 	}
 	private void initGrid() {
 		ArrayList<String> initStates = new ArrayList<String>();
-		int total = width*height;
-		for(int i=0;i<total;i++) {
-			int a = (int) Math.round(Math.random());
-			if(a==1)initStates.add("alive");
-			else initStates.add("dead");
+		if(gameType == GAMEOFLIFE) {
+			initStates = GoLStates(initStates);
+			ruleset = new GOLRuleset();
 		}
-		double cellSize = 50.0;
+		//add other gametypes
 		HashMap<String, Paint> colors = ruleset.getStateColors();
-		grid = new StandardGrid(height, width, initStates, cellSize, colors);
+		grid = new StandardGrid(width, height, initStates, CELLSIZE, colors);
 		HashMap<Point, Cell> map = grid.getCellMap();
 		for(Point c: map.keySet()) {
-			System.out.println(c.x+" "+c.y);
-			System.out.println(map.get(c).getX()+50+" "+map.get(c).getY()+50);
 			Shape temp = map.get(c).getShape();
 			temp.setLayoutX(map.get(c).getX()+50);
 			temp.setLayoutY(map.get(c).getY()+50);
@@ -118,9 +129,17 @@ public class Simulation {
 			
 		}
 	}
+	private ArrayList<String> GoLStates(ArrayList<String> init){
+		int total = width*height;
+		for(int i=0;i<=total+1;i++) {
+			int a = (int) Math.round(Math.random());
+			if(a==1)init.add("alive");
+			else init.add("dead");
+		}
+		return init;
+	}
 	private void step(double secondDelay) {
 		if(pause)return;
-		System.out.println("running");
 		ruleset.updateGrid(grid);
 	}
 }
