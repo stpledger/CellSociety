@@ -39,6 +39,7 @@ public class Gui {
 	private double probCatch;
 	private int fireX;
 	private int fireY;
+	private double ratio;
 	
 	public Gui(Stage stage) {
 		this.stage = stage;
@@ -86,7 +87,7 @@ public class Gui {
 	        			System.out.println("please choose an xml file");//output some form of error
 	        			return;
 	        		}
-	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY);
+	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY, ratio);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {
@@ -115,6 +116,11 @@ public class Gui {
         		probCatch = parsed.getFireData().getProbCatch();
         		fireX = parsed.getFireData().getFireX();
         		fireY = parsed.getFireData().getFireY();
+        }else if(parsed.whichGame().equals("Segregation")) {
+        		width = parsed.getSegData().getWidthInt();
+        		height = parsed.getSegData().getHeightInt();
+        		gameType = parsed.getSegData().getGameType();
+        		ratio = parsed.getSegData().getRatio();
         }
     }
 	public Scene getScene() {
