@@ -30,8 +30,9 @@ public class StandardGrid extends Grid{
 	}
 	
 	public void switchStates(HashMap<String,Paint> stateColors){
+		System.out.print("Updated");
 		for(Cell cell : getCells()){
-			cell.switchState();
+			cell.switchState(stateColors);
 		}
 	}
 	
