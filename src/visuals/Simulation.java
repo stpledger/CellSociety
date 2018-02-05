@@ -150,10 +150,10 @@ public class Simulation {
 	}
 	private ArrayList<String> SegStates(ArrayList<String> init){
 		for(int i=0;i<=TOTAL+1;i++) {
-			int a = (int)(Math.random()*3);
-			if(a==0)init.add("empty");
+			int a = (int)(Math.random()*5);
+			if(a==0)init.add("o");
 			if(a==1)init.add("x");
-			else init.add("o");
+			else init.add("empty");
 		}
 		return init;
 	}
