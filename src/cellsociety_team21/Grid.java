@@ -9,7 +9,9 @@ import javafx.scene.paint.Paint;
 public abstract class Grid extends HashMap<Point, Cell>{
 	private HashMap<Point, Cell> cellMap;
 	
-	public abstract void assignNeighbors();
+	public abstract void assignNeighborsDiag();
+	
+	public abstract void assignNeighborsNoDiag();
 	
 	public ArrayList<Cell> getCells(){
 		return new ArrayList<Cell>(cellMap.values());
