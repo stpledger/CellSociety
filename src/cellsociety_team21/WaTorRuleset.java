@@ -14,6 +14,7 @@ public class WaTorRuleset extends Ruleset {
 	private static int myReproductionTime;
 	private static final int DEFAULT_ENERGY_PER_FISH = 2;
 	private static int myEnergyPerFish;
+	private ArrayList<Cell> untouchables;
 
 	public WaTorRuleset(int startEnergy, int reproductionTime, int energyPerFish){
 		super();
@@ -30,6 +31,8 @@ public class WaTorRuleset extends Ruleset {
 
 	@Override
 	public void updateGrid(Grid grid) {
+		untouchables = new ArrayList<Cell>();
+		//System.out.println(untouchables.size());
 		//System.out.println(grid.getCells().get(0).getNeighbors().size());
 		for(Cell cell : grid.getCells()) {
 			//try {
@@ -39,12 +42,12 @@ public class WaTorRuleset extends Ruleset {
 			//	throw new IllegalArgumentException("Tried to pass non-WaTor cells to WaTorRuleset");
 			//}
 		}
+		//System.out.println(untouchables.size());
 		grid.switchStates(this.getStateColors());
 
 	}
 
 	private void assignNext(WaTorCell cell) {
-		ArrayList<Cell> untouchables = new ArrayList<Cell>();//contains the cells that have been selected for moving
 		if(cell.getCurrentState().equals("water")) {
 			cell.setNextState("water");
 		}
@@ -52,6 +55,7 @@ public class WaTorRuleset extends Ruleset {
 			ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 			System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 			for(Cell neighbor : cell.getNeighbors()) {
+				//System.out.println(cell.getNeighbors().get(0).getCurrentState());
 				if(neighbor.getCurrentState().equals("water") && !untouchables.contains(neighbor)) {// (neighbor.getNextState().equals("water") || neighbor.getNextState().equals(null))) {
 					potentialDestinations.add(neighbor);
 				}
@@ -63,17 +67,20 @@ public class WaTorRuleset extends Ruleset {
 					cell.setNextState("fish");
 					cell.setNextTimeTilReproduction(myReproductionTime);
 					destination.setNextTimeTilReproduction(myReproductionTime);
+					System.out.println("reproduced");
 				}
 				else {
+					System.out.println("moved");
 					cell.setNextState("water");
+					destination.setNextTimeTilReproduction(cell.getCurrentTimeTilReproduction()-1);
 					cell.setNextTimeTilReproduction(0);
-					destination.setNextTimeTilReproduction(myReproductionTime-1);
 				}
 				cell.setNextEnergy(0);
 				destination.setNextState("fish");
 				destination.setNextEnergy(0);
 			}
 			else {
+				System.out.println("stayed");
 				cell.setNextState("fish");
 				cell.setNextTimeTilReproduction(cell.getCurrentTimeTilReproduction()-1);
 				cell.setNextEnergy(0);
