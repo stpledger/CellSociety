@@ -181,7 +181,7 @@ public class Simulation {
 		for(int i=0;i<=TOTAL+1;i++) {
 			int a = (int)(Math.random()*5);
 			if(a==0)init.add("fish");
-			//if(a==1)init.add("shark");
+			if(a==1)init.add("shark");
 			else init.add("water");
 		}
 		return init;
