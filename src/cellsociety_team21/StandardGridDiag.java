@@ -14,10 +14,6 @@ public class StandardGridDiag extends StandardGrid {
 		assignNeighborsDiag();
 	}
 	
-	public StandardGridDiag(){
-		super();
-	}
-	
 	private void assignNeighborsDiag(){
 		for (Point myPoint : getCellMap().keySet()){
 			for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i+=2){
