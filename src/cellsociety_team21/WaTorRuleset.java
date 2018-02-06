@@ -34,12 +34,12 @@ public class WaTorRuleset extends Ruleset {
 	@Override
 	public void updateGrid(Grid grid) {
 		for(Cell cell : grid.getCells()) {
-			try {
+			//try {
 				assignNext((WaTorCell) cell);
-			}
-			catch (Exception e){
-				throw new IllegalArgumentException("Tried to pass non-WaTor cells to WaTorRuleset");
-			}
+			//}
+			//catch (Exception e){
+			//	throw new IllegalArgumentException("Tried to pass non-WaTor cells to WaTorRuleset");
+			//}
 		}
 		grid.switchStates(this.getStateColors());
 
@@ -52,6 +52,7 @@ public class WaTorRuleset extends Ruleset {
 		}
 		else if(cell.getCurrentState().equals("fish")) {
 			ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
+			System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 			for(Cell neighbor : cell.getNeighbors()) {
 				if(neighbor.getCurrentState().equals("water") && (neighbor.getNextState().equals("water") || neighbor.getNextState().equals(null))) {
 					potentialDestinations.add(neighbor);
@@ -88,6 +89,7 @@ public class WaTorRuleset extends Ruleset {
 			else {
 				ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 				boolean fishAvailable;
+				System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 				for(Cell neighbor : cell.getNeighbors()) {
 					if(neighbor.getCurrentState().equals("fish") && !neighbor.getNextState().equals("shark")) {
 						potentialDestinations.add(neighbor);
