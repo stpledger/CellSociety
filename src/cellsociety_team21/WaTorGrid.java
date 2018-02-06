@@ -11,6 +11,8 @@ public class WaTorGrid extends StandardGridWrap {
 			HashMap<String, Paint> colors, int initEnergy, int initRepro){
 		super();
 		updateGrid(row, col, initStates, cellSize, colors, initEnergy, initRepro);
+		assignNeighborsNoDiag();
+		assignNeighborsWrap(row, col);
 	}
 
 	private void updateGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors,
