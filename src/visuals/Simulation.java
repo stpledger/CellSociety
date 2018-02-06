@@ -149,7 +149,8 @@ public class Simulation {
 			ruleset = new WaTorRuleset(startEnergy, reproduction, fishEnergy);
 		}
 		HashMap<String, Paint> colors = ruleset.getStateColors();
-		grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
+		if(gameType.equals(WATOR)) grid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, startEnergy, reproduction);
+		else grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
 		HashMap<Point, Cell> map = grid.getCellMap();
 		for(Point c: map.keySet()) {
 			Shape temp = map.get(c).getShape();
