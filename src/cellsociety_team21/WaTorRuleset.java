@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public class WaTorRuleset extends Ruleset {
 
@@ -27,12 +28,9 @@ public class WaTorRuleset extends Ruleset {
 		this.getStateColors().put("shark", Color.DARKGRAY);
 	}
 
-	WaTorRuleset(){
-		this(DEFAULT_START_ENERGY, DEFAULT_REPRODUCTION_TIME, DEFAULT_ENERGY_PER_FISH);
-	}
-
 	@Override
 	public void updateGrid(Grid grid) {
+		//System.out.println(grid.getCells().get(0).getNeighbors().size());
 		for(Cell cell : grid.getCells()) {
 			//try {
 				assignNext((WaTorCell) cell);
@@ -46,20 +44,21 @@ public class WaTorRuleset extends Ruleset {
 	}
 
 	private void assignNext(WaTorCell cell) {
+		ArrayList<Cell> untouchables = new ArrayList<Cell>();//contains the cells that have been selected for moving
 		if(cell.getCurrentState().equals("water")) {
 			cell.setNextState("water");
-			return;
 		}
 		else if(cell.getCurrentState().equals("fish")) {
 			ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 			System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 			for(Cell neighbor : cell.getNeighbors()) {
-				if(neighbor.getCurrentState().equals("water") && (neighbor.getNextState().equals("water") || neighbor.getNextState().equals(null))) {
+				if(neighbor.getCurrentState().equals("water") && !untouchables.contains(neighbor)) {// (neighbor.getNextState().equals("water") || neighbor.getNextState().equals(null))) {
 					potentialDestinations.add(neighbor);
 				}
 			}
 			if(potentialDestinations.size()!=0) {
 				WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
+				untouchables.add(destination);
 				if(cell.getCurrentTimeTilReproduction()<=0) {
 					cell.setNextState("fish");
 					cell.setNextTimeTilReproduction(myReproductionTime);
@@ -91,14 +90,14 @@ public class WaTorRuleset extends Ruleset {
 				boolean fishAvailable;
 				System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 				for(Cell neighbor : cell.getNeighbors()) {
-					if(neighbor.getCurrentState().equals("fish") && !neighbor.getNextState().equals("shark")) {
+					if(neighbor.getCurrentState().equals("fish") && !untouchables.contains(neighbor)) {
 						potentialDestinations.add(neighbor);
 					}
 				}
 				if(potentialDestinations.size()==0) {
 					fishAvailable = false;
 					for(Cell neighbor : cell.getNeighbors()) {
-						if(neighbor.getCurrentState().equals("water") && !neighbor.getNextState().equals("shark")) {
+						if(neighbor.getCurrentState().equals("water") && !untouchables.contains(neighbor)) {
 							potentialDestinations.add(neighbor);
 						}
 					}
@@ -108,6 +107,7 @@ public class WaTorRuleset extends Ruleset {
 				}
 				if(potentialDestinations.size()!=0) {
 					WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
+					untouchables.add(destination);
 					if(cell.getCurrentTimeTilReproduction()<=0) {
 						cell.setNextState("shark");
 						cell.setNextTimeTilReproduction(myReproductionTime);

@@ -12,8 +12,8 @@ public class StandardGridWrap extends StandardGrid {
 		super(row, col, initStates, cellSize, colors);
 		assignNeighborsWrap(row, col);
 	}
-	
-	public StandardGridWrap(){
+
+	public StandardGridWrap() {
 		super();
 	}
 

@@ -15,7 +15,7 @@ public class StandardGrid extends Grid{
 		assignNeighborsNoDiag();
 	}
 	
-	public StandardGrid(){
+	public StandardGrid() {
 		this.cellMap = new HashMap<Point, Cell>();
 	}
 	

@@ -57,6 +57,8 @@ public class Simulation {
     private int startEnergy;
     private int reproduction;
     private int fishEnergy;
+    private WaTorRuleset WaTorRules;
+    private WaTorGrid WaTorgrid;
     
 
 	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio, int sEnergy, int repro, int fEnergy) {
@@ -135,35 +137,51 @@ public class Simulation {
 	}
 	private void initGrid() {
 		ArrayList<String> initStates = new ArrayList<String>();
+		HashMap<String, Paint> colors;
 		if(gameType.equals(GAMEOFLIFE)) {
 			initStates = GoLStates(initStates);
 			ruleset = new GOLRuleset();
+			colors = ruleset.getStateColors();
 		}else if(gameType.equals(FIRE)) {
 			initStates = FireStates(initStates);
 			ruleset = new FireRuleset(probCatch);
+			colors = ruleset.getStateColors();
 		}else if(gameType.equals(SEGREGATION)) {
 			initStates = SegStates(initStates);
 			ruleset = new SegregationRuleset(ratio);
-		}else if(gameType.equals(WATOR)) {
+			colors = ruleset.getStateColors();
+		}else {
 			initStates = WatorStates(initStates);
-			ruleset = new WaTorRuleset(startEnergy, reproduction, fishEnergy);
+			WaTorRules = new WaTorRuleset(startEnergy, reproduction, fishEnergy);
+			colors = WaTorRules.getStateColors();
 		}
-		HashMap<String, Paint> colors = ruleset.getStateColors();
-		if(gameType.equals(WATOR)) grid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, startEnergy, reproduction);
-		else grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
-		HashMap<Point, Cell> map = grid.getCellMap();
-		for(Point c: map.keySet()) {
-			Shape temp = map.get(c).getShape();
-			temp.setLayoutX(map.get(c).getX()+BUTTONHEIGHTPAD);
-			temp.setLayoutY(map.get(c).getY()+BUTTONHEIGHT);
-			root.getChildren().add(temp);
+		
+		if(gameType.equals(WATOR)) {
+			WaTorgrid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, startEnergy, reproduction);
+			HashMap<Point, Cell> map = WaTorgrid.getCellMap();
+			for(Point c: map.keySet()) {
+				Shape temp = map.get(c).getShape();
+				temp.setLayoutX(map.get(c).getX()+BUTTONHEIGHTPAD);
+				temp.setLayoutY(map.get(c).getY()+BUTTONHEIGHT);
+				root.getChildren().add(temp);
+			}
+		}
+		else {
+			grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
+			HashMap<Point, Cell> map = grid.getCellMap();
+			for(Point c: map.keySet()) {
+				Shape temp = map.get(c).getShape();
+				temp.setLayoutX(map.get(c).getX()+BUTTONHEIGHTPAD);
+				temp.setLayoutY(map.get(c).getY()+BUTTONHEIGHT);
+				root.getChildren().add(temp);
+			}
 		}
 	}
 	private ArrayList<String> WatorStates(ArrayList<String> init){
 		for(int i=0;i<=TOTAL+1;i++) {
 			int a = (int)(Math.random()*5);
 			if(a==0)init.add("fish");
-			if(a==1)init.add("shark");
+			//if(a==1)init.add("shark");
 			else init.add("water");
 		}
 		return init;
@@ -194,6 +212,11 @@ public class Simulation {
 	}
 	private void step(double secondDelay) {
 		if(pause)return;
-		ruleset.updateGrid(grid);
+		if(gameType.equals(WATOR)) {
+			WaTorRules.updateGrid(WaTorgrid);
+		}
+		else {
+			ruleset.updateGrid(grid);
+		}
 	}
 }

@@ -14,7 +14,7 @@ public class WaTorGrid extends StandardGridWrap {
 		assignNeighborsNoDiag();
 		assignNeighborsWrap(row, col);
 	}
-
+	
 	private void updateGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors,
 			int initEnergy, int initRepro) {
 		for (int i = 0; i < row; i++){
@@ -27,5 +27,4 @@ public class WaTorGrid extends StandardGridWrap {
 			}
 		}
 	}
-	
 }
