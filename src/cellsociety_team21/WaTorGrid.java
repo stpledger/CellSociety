@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 
 public class WaTorGrid extends StandardGridWrap {
 	public WaTorGrid(int row, int col, ArrayList<String> initStates, double cellSize,
-			HashMap<String, Paint> colors, int initEnergy, int initRepro){
+					HashMap<String, Paint> colors, int initEnergy, int initRepro){
 		super();
 		updateGrid(row, col, initStates, cellSize, colors, initEnergy, initRepro);
 		assignNeighborsNoDiag();

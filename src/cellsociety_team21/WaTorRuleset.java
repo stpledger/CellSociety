@@ -48,6 +48,7 @@ public class WaTorRuleset extends Ruleset {
 			cell.setNextState("water");
 		}
 		else if(cell.getCurrentState().equals("fish")) {
+			System.out.println("Fish has this many neighbors: "+cell.getNeighbors().size());
 			ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 			//System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 			for(Cell neighbor : cell.getNeighbors()) {
@@ -55,6 +56,7 @@ public class WaTorRuleset extends Ruleset {
 					potentialDestinations.add(neighbor);
 				}
 			}
+			System.out.println("Fish has this many potential destintions: "+potentialDestinations.size());
 			if(potentialDestinations.size()!=0) {
 				WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
 				if(cell.getCurrentTimeTilReproduction()<=0) {
@@ -81,6 +83,7 @@ public class WaTorRuleset extends Ruleset {
 			}
 		}
 		else if(cell.getCurrentState().equals("shark")) {
+			System.out.println("Shark has this many neighbors: "+cell.getNeighbors().size());
 			if(cell.getCurrentEnergy()==0) {
 				cell.setNextState("water");
 				cell.setNextEnergy(0);
@@ -106,8 +109,10 @@ public class WaTorRuleset extends Ruleset {
 				else {
 					fishAvailable = true;
 				}
+				System.out.println("Shark has this many potential destinations: "+potentialDestinations.size());
 				if(potentialDestinations.size()!=0) {
 					WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
+					
 					if(cell.getCurrentTimeTilReproduction()<=0) {
 						cell.setNextState("shark");
 						cell.setNextTimeTilReproduction(myReproductionTime);
