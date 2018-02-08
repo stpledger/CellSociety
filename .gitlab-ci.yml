@@ -6,4 +6,4 @@ sonar_analysis:
   tags:
     - sonarqube
   only:
-    - ActiveCells
+    - master
