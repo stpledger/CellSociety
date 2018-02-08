@@ -61,6 +61,7 @@ public class Driver {
 	private WaTorGrid WaTorgrid;
 
 
+
 	public Driver(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio, int sEnergy, int repro, int fEnergy) {
 		this.SIZEW = ((int)CELLSIZE*width)+2*BUTTONHEIGHT;
 		this.SIZEH = ((int)CELLSIZE*height)+2*BUTTONHEIGHT;
