@@ -118,7 +118,6 @@ public class Driver {
 		Button stop = (Button) nodeMaker(STOP, 0, BUTTONHEIGHT*2, BUTTON);
 		Button reset = (Button) nodeMaker(RESET, 0, BUTTONHEIGHT*3, BUTTON);
 		Button submit = (Button) nodeMaker(SUBMIT, 0, BUTTONHEIGHT*4, BUTTON);
-		Button grid = (Button) nodeMaker()
 		Text col = (Text) nodeMaker(COLUMNS, 0, BUTTONHEIGHT*5, TEXT);
 		TextField widthText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*5), TEXTFIELD);
 		widthText.setText(Integer.toString(width));
