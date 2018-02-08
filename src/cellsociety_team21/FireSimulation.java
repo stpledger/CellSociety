@@ -10,7 +10,6 @@ import javafx.scene.paint.Paint;
 
 public class FireSimulation extends BasicSim {
 
-	private static final double DEFAULT_PROB_CATCH = 0.5;
 	private static double myProbCatch;
 
 	public FireSimulation(double probCatch){
@@ -24,9 +23,6 @@ public class FireSimulation extends BasicSim {
 		myProbCatch = probCatch;
 	}
 
-	FireSimulation(){
-		this(DEFAULT_PROB_CATCH);
-	}
 
 	/*
 	void assignNext(Cell c) {

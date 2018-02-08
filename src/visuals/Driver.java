@@ -118,6 +118,7 @@ public class Driver {
 		Button stop = (Button) nodeMaker(STOP, 0, BUTTONHEIGHT*2, BUTTON);
 		Button reset = (Button) nodeMaker(RESET, 0, BUTTONHEIGHT*3, BUTTON);
 		Button submit = (Button) nodeMaker(SUBMIT, 0, BUTTONHEIGHT*4, BUTTON);
+		Button grid = (Button) nodeMaker()
 		Text col = (Text) nodeMaker(COLUMNS, 0, BUTTONHEIGHT*5, TEXT);
 		TextField widthText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*5), TEXTFIELD);
 		widthText.setText(Integer.toString(width));
@@ -278,7 +279,7 @@ public class Driver {
 		else {
 			init = simStates;
 			if(simStates.size()<width*height) {
-				ArrayList<String> diffStates = simStates;//should use a proper holder of all simulation states
+				ArrayList<String> diffStates = simulation.getStates();//should use a proper holder of all simulation states
 				for(int i=simStates.size();i<=width*height;i++) {
 					int temp = (int)(Math.random()*diffStates.size());
 					init.add(diffStates.get(temp));

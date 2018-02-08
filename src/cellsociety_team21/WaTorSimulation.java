@@ -8,11 +8,8 @@ import javafx.scene.shape.Rectangle;
 
 public class WaTorSimulation extends BasicSim {
 
-	private static final int DEFAULT_START_ENERGY = 3;
 	private static int myStartEnergy;
-	private static final int DEFAULT_REPRODUCTION_TIME = 3;
 	private static int myReproductionTime;
-	private static final int DEFAULT_ENERGY_PER_FISH = 2;
 	private static int myEnergyPerFish;
 
 	public WaTorSimulation(int startEnergy, int reproductionTime, int energyPerFish){
