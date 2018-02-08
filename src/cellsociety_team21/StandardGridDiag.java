@@ -9,8 +9,8 @@ import javafx.scene.paint.Paint;
 public class StandardGridDiag extends StandardGrid {
 
 	public StandardGridDiag(int row, int col, ArrayList<String> initStates, double cellSize,
-			HashMap<String, Paint> colors) {
-		super(row, col, initStates, cellSize, colors);
+			HashMap<String, Paint> colors, String gameType) {
+		super(row, col, initStates, cellSize, colors, gameType);
 		assignNeighborsDiag();
 	}
 	

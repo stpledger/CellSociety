@@ -5,10 +5,13 @@ public class WatorData extends DataType{
 	private int reproduction;
 	private int fishEnergy;
 	
-	public WatorData(String GameType, String Title, String width, String height, String sEnergy, String repro, String eFish) {
+	public WatorData(String GameType, String Title, String width, String height, String sEnergy, String repro, String eFish, String randomAssign, String grid, String s) {
 		super.init(width, height);
 		super.setGameType(GameType);
 		super.setTitle(Title);
+		super.setRandom(randomAssign);
+		super.setGrid(grid);
+		super.setStates(s);
 		this.startEnergy = Integer.parseInt(sEnergy);
 		this.reproduction = Integer.parseInt(repro);
 		this.fishEnergy = Integer.parseInt(eFish);
@@ -22,5 +25,10 @@ public class WatorData extends DataType{
 	public int getFishEnergy() {
 		return fishEnergy;
 	}
-	
+	public void setStartEnergy(int newV) {
+		startEnergy = newV;
+	}
+	public void setReproduction(int newV) {
+		reproduction = newV;
+	}
 }

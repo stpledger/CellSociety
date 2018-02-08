@@ -4,6 +4,7 @@
 <width>10</width>
 <height>10</height>
 <probCatch>0.5</probCatch>
-<startFireX>3</startFireX>
-<startFireY>5</startFireY>
+<randomAssign>True</randomAssign>
+<grid>True</grid>
+<states>burning,tree,empty</states>
 </data>

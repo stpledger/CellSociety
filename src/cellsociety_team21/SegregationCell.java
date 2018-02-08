@@ -72,7 +72,9 @@ public class SegregationCell extends BasicCell {
 			System.out.println("moved cell");
 		}
 		else {
-			throw new IllegalArgumentException("An unsatisfied cell could not be moved");
+			this.setNextState(this.getCurrentState());
+			System.out.println("was not satisfied, could not be moved");
+			//throw new IllegalArgumentException("An unsatisfied cell could not be moved");
 		}
 	}
 	

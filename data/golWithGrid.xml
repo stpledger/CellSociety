@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data gameType="GameOfLife">
+<title>Game of Life</title>
+<randomAssign>False</randomAssign>
+<width>10</width>
+<height>10</height>
+<grid>True</grid>
+<states>alive,dead,alive,dead,alive,dead,alive,dead,alive,dead,dead,alive,dead,alive,dead,alive,dead,alive,dead,alive,alive,dead,alive,dead,alive,dead,alive,dead,alive,dead,dead,alive,dead,alive,dead,alive,dead,alive,dead,alive,alive,dead,alive,dead,alive,dead,alive,dead,alive,dead,dead,alive,dead,alive,dead,alive,dead,alive,dead,alive,alive,alive,alive,dead,alive,dead,dead,dead,alive,dead,alive,alive,alive,dead,alive,dead,dead,dead,alive,dead,alive,alive,alive,dead,alive,dead,dead,dead,alive,dead,alive,alive,alive,dead,alive,dead,dead,dead,alive,dead</states>
+</data>

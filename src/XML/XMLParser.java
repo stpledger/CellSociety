@@ -28,25 +28,42 @@ public class XMLParser {
 	private static final String STARTENERGY = "startEnergy";
 	private static final String REPRODUCTION = "reproduction";
 	private static final String ENERGYFISH = "energyFish";
+	private static final String XML = ".xml";
+	private static final String RANDOMASSIGN = "randomAssign";
+	private static final String GRID = "grid";
+	private static final String STATES = "states";
 	private static int FIRST = 0;
-	private static String whichGame;
-	private GoLData gol;
-	private FireData fire;
-	private SegregationData seg;
-	private WatorData wator;
+	private DataType data;
+	private String title;
+	private String height;
+	private String width;
+	private String randomAssign;
+	private String grid;
+	private String states;
+	private String initialStates;
+	private boolean fileFailed;
+
 	
 	public XMLParser(File file) {
+		this.fileFailed = false;
 		this.file = file;
 		try {
 			openFile(file);
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			fileFailed = true;
 		} 
 	}
 
 	private void openFile(File file) throws ParserConfigurationException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
+        String filePath = file.getAbsolutePath();
+        String fileType = filePath.substring(filePath.length()-4);
+        if(!fileType.equals(XML)) {
+        		fileFailed = true;
+        		return;
+        }
+
 		try {
 				dBuilder = dbFactory.newDocumentBuilder();
 				Document doc;
@@ -57,66 +74,71 @@ public class XMLParser {
 					Node nNode = nList.item(FIRST);
 					Element eElement = (Element) nNode;
 					if(eElement.getAttribute(GAMETYPE).equals(GOL)) {
-						whichGame = GOL;
-						String title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
-						String width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
-						String height = eElement.getElementsByTagName(HEIGHT).item(FIRST).getTextContent();
-						gol = new GoLData(GOL, title, width, height);
-						//return life;
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
+						data = new GoLData(GOL, title, width, height, randomAssign, grid, states);
+							
 					}else if(eElement.getAttribute(GAMETYPE).equals(FIRE)) {
-						whichGame = FIRE;
-						String title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
-						String width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
-						String height = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
 						String probCatch = eElement.getElementsByTagName(CATCHFIREPROBABILITY).item(FIRST).getTextContent();
-						String initFireX = eElement.getElementsByTagName("startFireX").item(FIRST).getTextContent();
-						String initFireY = eElement.getElementsByTagName("startFireY").item(FIRST).getTextContent();
-						fire = new FireData(FIRE, title, width, height, probCatch, initFireX, initFireY);
-						//return life;
+						data = new FireData(FIRE, title, width, height, probCatch, randomAssign, grid, states);
 					}else if(eElement.getAttribute(GAMETYPE).equals(SEGREGATION)) {
-						whichGame = SEGREGATION;
-						String title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
-						String width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
-						String height = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
 						String ratio = eElement.getElementsByTagName(RATIO).item(FIRST).getTextContent();
-						seg = new SegregationData(SEGREGATION, title, width, height, ratio);
-						//segregation has been parsed, need to add that into simulation/GUI
+						data = new SegregationData(SEGREGATION, title, width, height, ratio, randomAssign, grid, states);
 					}else if(eElement.getAttribute(GAMETYPE).equals(WATOR)) {
-						whichGame = WATOR;
-						String title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
-						String width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
-						String height = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
 						String sEnergy = eElement.getElementsByTagName(STARTENERGY).item(FIRST).getTextContent();
-						String repro = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
-						String fEnergy = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
-						wator = new WatorData(WATOR, title, width, height, sEnergy, repro, fEnergy);
+						String repro = eElement.getElementsByTagName(REPRODUCTION).item(FIRST).getTextContent();
+						String fEnergy = eElement.getElementsByTagName(ENERGYFISH).item(FIRST).getTextContent();
+						data = new WatorData(WATOR, title, width, height, sEnergy, repro, fEnergy, randomAssign, grid, states);
 					}
 				} catch (SAXException e) {
-					e.printStackTrace();
+					fileFailed = true;
+					return;
 				}
 				
 		} catch (IOException e) {
-				e.printStackTrace();
+			fileFailed = true;
+			return;
 		}
-		//return null;
 	}
-	public String whichGame() {
-		return whichGame;
+	
+	public void assignTWH(Element eElement){
+		title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
+		width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
+		height = eElement.getElementsByTagName(HEIGHT).item(FIRST).getTextContent();
+		randomAssign = eElement.getElementsByTagName(RANDOMASSIGN).item(FIRST).getTextContent();
+		states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
+		grid = eElement.getElementsByTagName(GRID).item(FIRST).getTextContent();
+		if(!randomAssign.equals("True")) states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
 	}
-	public GoLData getGOLData() {
-		if(gol!=null) return gol;
-		return null;//change this later since we don't want nulls
+	
+	public DataType getData() {
+		return data;
 	}
-	public FireData getFireData() {
-		if(fire!=null) return fire;
-		return null;//change this later since we don't want nulls
+	
+	public boolean isFailed() {
+		return fileFailed;
 	}
-	public SegregationData getSegData() {
-		if(seg!=null) return seg;
-		return null;//change this later since we don't want nulls
-	}
-	public WatorData getWatorData() {
-		if(wator!=null) return wator;
-		return null;
-	}
+
 }
