@@ -19,49 +19,49 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Simulation {
+public class Driver {
 	public static final int FRAMES_PER_SECOND = 1;
-    public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
-    private static final double CELLSIZE = 50.0;
-    private static final int BUTTONHEIGHT = 50;
-    private static final int BUTTONHEIGHTPAD = BUTTONHEIGHT+10;
-    private static final Color BACKGROUND = Color.ALICEBLUE;
-    private static final String GAMEOFLIFE = "GameOfLife";
-    private static final String SEGREGATION = "Segregation";
-    private static final String WATOR = "Wator";
-    private static final String FIRE = "Fire";
-    private static final String MAIN = "Main";
-    private static final String START = "Start";
-    private static final String STOP = "Stop";
-    private static final String RESET = "Reset";
-    private GridPane pane;
-    private Group root;
-    private Stage stage;
-    private Scene scene;
-    private String gameType;
-    private Timeline animation;
-    private int width;
-    private int height;
-    private boolean pause;
-    private Ruleset ruleset;
-    private StandardGrid grid;
-    private int SIZEW;
-    private int SIZEH;
-    private double probCatch;
-    private int fireX;
-    private int fireY;
-    private boolean diag;
-    private double ratio;
-    private int TOTAL;
-    private int startEnergy;
-    private int reproduction;
-    private int fishEnergy;
-    private WaTorRuleset WaTorRules;
-    private WaTorGrid WaTorgrid;
-    
+	public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+	public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	private static final double CELLSIZE = 50.0;
+	private static final int BUTTONHEIGHT = 50;
+	private static final int BUTTONHEIGHTPAD = BUTTONHEIGHT+10;
+	private static final Color BACKGROUND = Color.ALICEBLUE;
+	private static final String GAMEOFLIFE = "GameOfLife";
+	private static final String SEGREGATION = "Segregation";
+	private static final String WATOR = "Wator";
+	private static final String FIRE = "Fire";
+	private static final String MAIN = "Main";
+	private static final String START = "Start";
+	private static final String STOP = "Stop";
+	private static final String RESET = "Reset";
+	private GridPane pane;
+	private Group root;
+	private Stage stage;
+	private Scene scene;
+	private String gameType;
+	private Timeline animation;
+	private int width;
+	private int height;
+	private boolean pause;
+	private Simulation simulation;
+	private StandardGrid grid;
+	private int SIZEW;
+	private int SIZEH;
+	private double probCatch;
+	private int fireX;
+	private int fireY;
+	private boolean diag;
+	private double ratio;
+	private int TOTAL;
+	private int startEnergy;
+	private int reproduction;
+	private int fishEnergy;
+	private WaTorSimulation WaTorSim;
+	private WaTorGrid WaTorgrid;
 
-	public Simulation(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio, int sEnergy, int repro, int fEnergy) {
+
+	public Driver(GridPane pane, Stage stage, Scene scene, String gameType, int width, int height, double probCatch, int x, int y, double ratio, int sEnergy, int repro, int fEnergy) {
 		this.SIZEW = ((int)CELLSIZE*width)+2*BUTTONHEIGHT;
 		this.SIZEH = ((int)CELLSIZE*height)+2*BUTTONHEIGHT;
 		this.pane = pane;
@@ -105,15 +105,15 @@ public class Simulation {
 				if(animation!=null)animation.stop();
 				Gui restart = new Gui(stage);
 				Scene scene = restart.getScene();
-		        stage.setScene(scene);
-		        stage.show();
+				stage.setScene(scene);
+				stage.show();
 			}
 		});
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				pause = false;
 				KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-		                e -> step(SECOND_DELAY));
+						e -> step(SECOND_DELAY));
 				if(animation!=null) {
 					animation.stop();
 				}
@@ -140,22 +140,31 @@ public class Simulation {
 		HashMap<String, Paint> colors;
 		if(gameType.equals(GAMEOFLIFE)) {
 			initStates = GoLStates(initStates);
-			ruleset = new GOLRuleset();
-			colors = ruleset.getStateColors();
-		}else if(gameType.equals(FIRE)) {
+			simulation = new GOLSimulation();
+			colors = simulation.getStateColors();
+		}
+		else if(gameType.equals(FIRE)) {
 			initStates = FireStates(initStates);
-			ruleset = new FireRuleset(probCatch);
-			colors = ruleset.getStateColors();
-		}else if(gameType.equals(SEGREGATION)) {
+			simulation = new FireSimulation(probCatch);
+			colors = simulation.getStateColors();
+		}
+		else if(gameType.equals(SEGREGATION)) {
 			initStates = SegStates(initStates);
-			ruleset = new SegregationRuleset(ratio);
-			colors = ruleset.getStateColors();
-		}else {
-			initStates = WatorStates(initStates);
-			WaTorRules = new WaTorRuleset(startEnergy, reproduction, fishEnergy);
-			colors = WaTorRules.getStateColors();
+			simulation = new SegregationSimulation(ratio);
+			colors = simulation.getStateColors();
 		}
 		
+		/*
+		else {
+			colors = new HashMap<String, Paint>();
+		}
+		*/
+		else {
+			initStates = WatorStates(initStates);
+			WaTorSim = new WaTorSimulation(startEnergy, reproduction, fishEnergy);
+			colors = WaTorSim.getStateColors();
+		}
+		 
 		if(gameType.equals(WATOR)) {
 			WaTorgrid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, startEnergy, reproduction);
 			HashMap<Point, Cell> map = WaTorgrid.getCellMap();
@@ -212,11 +221,15 @@ public class Simulation {
 	}
 	private void step(double secondDelay) {
 		if(pause)return;
+		
 		if(gameType.equals(WATOR)) {
-			WaTorRules.updateGrid(WaTorgrid);
+			WaTorSim.updateGrid(WaTorgrid);
 		}
 		else {
-			ruleset.updateGrid(grid);
+		 
+		simulation.updateGrid(grid);
+		
 		}
+		 
 	}
 }

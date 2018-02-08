@@ -91,7 +91,7 @@ public class Gui {
 	        			sim.setText(SIMULATION+NOFILE);
 	        			return;
 	        		}
-	        		Simulation run = new Simulation(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY, ratio, startEnergy, reproduction, fishEnergy);
+	        		Driver run = new Driver(pane, stage, scene, gameType, width, height, probCatch, fireX, fireY, ratio, startEnergy, reproduction, fishEnergy);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {

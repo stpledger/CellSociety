@@ -8,12 +8,12 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-public class FireRuleset extends Ruleset {
+public class FireSimulation extends BasicSim {
 
-	//private static final double DEFAULT_PROB_CATCH = 0.5;
+	private static final double DEFAULT_PROB_CATCH = 0.5;
 	private static double myProbCatch;
-	
-	public FireRuleset(double probCatch){
+
+	public FireSimulation(double probCatch){
 		super();
 		this.getStates().add("burning");
 		this.getStates().add("tree");
@@ -23,20 +23,15 @@ public class FireRuleset extends Ruleset {
 		this.getStateColors().put("empty", Color.BLACK);
 		myProbCatch = probCatch;
 	}
-	
-	/*FireRuleset(){
-		this(DEFAULT_PROB_CATCH);
-	}*/
 
-	@Override
-	public void updateGrid(Grid grid) {
-		for(Cell cell : grid.getCells()) {
-			assignNext(cell);
-		}
-		grid.switchStates(this.getStateColors());
+	FireSimulation(){
+		this(DEFAULT_PROB_CATCH);
 	}
 
+	/*
 	void assignNext(Cell c) {
+
+
 		if(c.getCurrentState().equals("empty") || c.getCurrentState().equals("burning")) {
 			c.setNextState("empty");
 			return;
@@ -59,6 +54,11 @@ public class FireRuleset extends Ruleset {
 		else {
 			throw new IllegalStateException("Cell state not consistent with simulation options");
 		}
-	}
 
+	}
+	 */
+	public double getProbCatch() {
+		return myProbCatch;
+	}
 }
+
