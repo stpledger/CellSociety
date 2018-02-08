@@ -5,7 +5,6 @@
 <height>10</height>
 <randomAssign>True</randomAssign>
 <grid>True</grid>
-<<<<<<< HEAD
 <startEnergy>5</startEnergy>
 <reproduction>3</reproduction>
 <energyFish>2</energyFish>
