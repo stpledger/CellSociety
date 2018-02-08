@@ -3,5 +3,8 @@
 <title>Segregation Simulation</title>
 <width>10</width>
 <height>10</height>
+<randomAssign>True</randomAssign>
+<grid>True</grid>
 <ratio>0.3</ratio>
+<states>empty,x,o</states>
 </data>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data gameType="Fire">
+<title>Spreading Fire</title>
+<width>10</width>
+<height>10</height>
+<probCatch>0.5</probCatch>
+<randomAssign>False</randomAssign>
+<grid>False</grid>
+<states>empty,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,burning,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,tree,empty,tree</states>
+</data>

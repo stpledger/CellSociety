@@ -32,6 +32,7 @@ public class Simulation {
     private final static int SIZEW = 600;
     private final static int SIZEH = 600;
     private static final Color BACKGROUND = Color.ALICEBLUE;
+    private static final Color BLACK = Color.BLACK;
     private static final String INT = "int";
     private static final String DOUBLE = "double";
     private static final String GAMEOFLIFE = "GameOfLife";
@@ -65,15 +66,16 @@ public class Simulation {
     private boolean pause;
     private Ruleset ruleset;
     private StandardGrid grid;
-    private WaTorRuleset WaTorRules;
-    private WaTorGrid WaTorgrid;
     private double CELLSIZE;
     private GoLData gol;
     private FireData fire;
     private SegregationData seg;
     private WatorData wator;
     private TextField repro, sEnergy, segRatio, pFireText;
-    
+    private boolean randomAssign;
+    private boolean gridLines;
+    private ArrayList<String> simStates;
+    //TODO: add validation checking for grid values given, grid lines and speed of sim
 
 	public Simulation(Stage stage, Scene scene, String gameType, DataType data) {
 		this.stage = stage;
@@ -81,6 +83,9 @@ public class Simulation {
 		this.gameType = gameType;
 		this.width = data.getWidthInt();
 		this.height = data.getHeightInt();
+		this.randomAssign = data.isRandom();
+		this.gridLines = data.isGrid();
+		this.simStates = data.getStates();
 		if(gameType.equals(GAMEOFLIFE)) this.gol = (GoLData) data;
 		else if(gameType.equals(FIRE)) this.fire = (FireData) data;
 		else if(gameType.equals(SEGREGATION)) this.seg = (SegregationData) data;
@@ -232,85 +237,59 @@ public class Simulation {
 		return parsable;
 	}
 	private void initGrid() {
-		ArrayList<String> initStates = new ArrayList<String>();
-		HashMap<String, Paint> colors;
 		if(gameType.equals(GAMEOFLIFE)) {
-			initStates = GoLStates(initStates);
 			ruleset = new GOLRuleset();
-			colors = ruleset.getStateColors();
 		}else if(gameType.equals(FIRE)) {
-			initStates = FireStates(initStates);
 			ruleset = new FireRuleset(fire.getProbCatch());
-			colors = ruleset.getStateColors();
 		}else if(gameType.equals(SEGREGATION)) {
-			initStates = SegStates(initStates);
 			ruleset = new SegregationRuleset(seg.getRatio());
-			colors = ruleset.getStateColors();
 		}else {
-			initStates = WatorStates(initStates);
-			WaTorRules = new WaTorRuleset(wator.getStartEnergy(), wator.getReproduction(), wator.getFishEnergy());
-			colors = WaTorRules.getStateColors();
+			ruleset = new WaTorRuleset(wator.getStartEnergy(), wator.getReproduction(), wator.getFishEnergy());
 		}
 		
+		ArrayList<String> initStates = new ArrayList<String>();
+		initStates = initializeStates(initStates);
+		HashMap<String, Paint> colors = ruleset.getStateColors();
 		if(gameType.equals(WATOR)) {
-			WaTorgrid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, wator.getStartEnergy(), wator.getReproduction());
-			setUpGridVisuals(WaTorgrid.getCellMap());
-			
+			grid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, wator.getStartEnergy(), wator.getReproduction());
 		}
 		else {
 			grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
-			setUpGridVisuals(grid.getCellMap());
-			
 		}
+		setUpGridVisuals(grid.getCellMap());
 	}
 	private void setUpGridVisuals(HashMap<Point, Cell> map) {
 		for(Point c: map.keySet()) {
 			Shape temp = map.get(c).getShape();
 			temp.setLayoutX(map.get(c).getX()+10+2*BUTTONHEIGHTPAD);
 			temp.setLayoutY(map.get(c).getY()+2*BUTTONHEIGHT);
+			if(gridLines) temp.setStroke(BLACK);
 			root.getChildren().add(temp);
 		}
 	}
-	private ArrayList<String> WatorStates(ArrayList<String> init){
-		for(int i=0;i<=width*height;i++) {
-			int a = (int)(Math.random()*5);
-			if(a==0)init.add("fish");
-			//if(a==1)init.add("shark");
-			else init.add("water");
-		}
-		return init;
-	}
-	private ArrayList<String> SegStates(ArrayList<String> init){
-		for(int i=0;i<=width*height;i++) {
-			int a = (int)(Math.random()*5);
-			if(a==0)init.add("o");
-			if(a==1)init.add("x");
-			else init.add("empty");
-		}
-		return init;
-	}
-	private ArrayList<String> FireStates(ArrayList<String> init){
-		for(int i=0;i<=width*height;i++) {
-			if(i==fire.getFireX()*fire.getFireY())init.add("burning");
-			init.add("tree");
-		}
-		return init;
-	}
-	private ArrayList<String> GoLStates(ArrayList<String> init){
-		for(int i=0;i<=width*height;i++) {
-			int a = (int) Math.round(Math.random());
-			if(a==1)init.add("alive");
-			else init.add("dead");
-		}
-		return init;
-	}
-	private void step(double secondDelay) {
-		if(pause)return;
-		if(gameType.equals(WATOR)) {
-			WaTorRules.updateGrid(WaTorgrid);
+	private ArrayList<String> initializeStates(ArrayList<String> init) {
+		if(randomAssign) {
+			for(int i=0;i<=width*height;i++) {
+				int temp = (int)(Math.random()*simStates.size());
+				init.add(simStates.get(temp));
+			}
+			return init;
 		}
 		else {
-			ruleset.updateGrid(grid);
+			init = simStates;
+			if(simStates.size()<width*height) {
+				ArrayList<String> diffStates = ruleset.getStates();
+				for(int i=simStates.size();i<=width*height;i++) {
+					int temp = (int)(Math.random()*diffStates.size());
+					init.add(diffStates.get(temp));
+				}
+			}
+			return init;
 		}
+	}
+
+	private void step(double secondDelay) {
+		if(pause)return;
+		ruleset.updateGrid(grid);
 	}
 }

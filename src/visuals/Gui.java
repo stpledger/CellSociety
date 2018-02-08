@@ -25,7 +25,7 @@ public class Gui {
 	private static final String SIM = "Simulation";
 	private static final String SIMULATION = "Sim: ";
 	private static final String FILE = "File";
-	private static final String NOFILE = "Choose an XML File";
+	private static final String NOFILE = "Incorrect XML File";
 	private static final String BUTTON = "button";
 	private static final String LABEL = "label";
 	private static final String TEXT = "text";
@@ -65,8 +65,11 @@ public class Gui {
 	    			File file = filechooser.showOpenDialog(stage);
 	    			if(file != null) {
 	    				openFile(file);
-	    				sim.setText(SIMULATION + gameType);
-	    				if(parsed.isFailed()) return;
+	    				if(parsed.isFailed()) {
+	    					sim.setText(SIMULATION + NOFILE);
+	    					return;
+	    				}
+	    				sim.setText(SIMULATION + data.getGameType());
 	    			}
 	    		}
 	    });
@@ -87,7 +90,6 @@ public class Gui {
 	private void openFile(File file) {
         parsed = new XMLParser(file);
         if(parsed.isFailed()) {
-        		gameType = NOFILE;
         		return;
         }
         data = parsed.getData();

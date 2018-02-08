@@ -50,7 +50,8 @@ public abstract class SimpleMoveRuleset extends Ruleset {
 			System.out.println("moved cell");
 		}
 		else {
-			throw new IllegalArgumentException("An unsatisfied cell could not be moved");
+			cell.setNextState(cell.getCurrentState());
+			//throw new IllegalArgumentException("An unsatisfied cell could not be moved");
 		}
 	}
 

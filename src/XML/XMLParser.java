@@ -29,11 +29,18 @@ public class XMLParser {
 	private static final String REPRODUCTION = "reproduction";
 	private static final String ENERGYFISH = "energyFish";
 	private static final String XML = ".xml";
+	private static final String RANDOMASSIGN = "randomAssign";
+	private static final String GRID = "grid";
+	private static final String STATES = "states";
 	private static int FIRST = 0;
 	private DataType data;
 	private String title;
 	private String height;
 	private String width;
+	private String randomAssign;
+	private String grid;
+	private String states;
+	private String initialStates;
 	private boolean fileFailed;
 
 	
@@ -67,38 +74,63 @@ public class XMLParser {
 					Node nNode = nList.item(FIRST);
 					Element eElement = (Element) nNode;
 					if(eElement.getAttribute(GAMETYPE).equals(GOL)) {
-						assignTWH(eElement);
-						data = new GoLData(GOL, title, width, height);
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
+						data = new GoLData(GOL, title, width, height, randomAssign, grid, states);
+							
 					}else if(eElement.getAttribute(GAMETYPE).equals(FIRE)) {
-						assignTWH(eElement);
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
 						String probCatch = eElement.getElementsByTagName(CATCHFIREPROBABILITY).item(FIRST).getTextContent();
-						String initFireX = eElement.getElementsByTagName("startFireX").item(FIRST).getTextContent();
-						String initFireY = eElement.getElementsByTagName("startFireY").item(FIRST).getTextContent();
-						data = new FireData(FIRE, title, width, height, probCatch, initFireX, initFireY);
+						data = new FireData(FIRE, title, width, height, probCatch, randomAssign, grid, states);
 					}else if(eElement.getAttribute(GAMETYPE).equals(SEGREGATION)) {
-						assignTWH(eElement);
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
 						String ratio = eElement.getElementsByTagName(RATIO).item(FIRST).getTextContent();
-						data = new SegregationData(SEGREGATION, title, width, height, ratio);
+						data = new SegregationData(SEGREGATION, title, width, height, ratio, randomAssign, grid, states);
 					}else if(eElement.getAttribute(GAMETYPE).equals(WATOR)) {
-						assignTWH(eElement);
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
 						String sEnergy = eElement.getElementsByTagName(STARTENERGY).item(FIRST).getTextContent();
 						String repro = eElement.getElementsByTagName(REPRODUCTION).item(FIRST).getTextContent();
 						String fEnergy = eElement.getElementsByTagName(ENERGYFISH).item(FIRST).getTextContent();
-						data = new WatorData(WATOR, title, width, height, sEnergy, repro, fEnergy);
+						data = new WatorData(WATOR, title, width, height, sEnergy, repro, fEnergy, randomAssign, grid, states);
 					}
 				} catch (SAXException e) {
 					fileFailed = true;
+					return;
 				}
 				
 		} catch (IOException e) {
-				fileFailed = true;
+			fileFailed = true;
+			return;
 		}
 	}
 	
-	public void assignTWH(Element eElement) {
+	public void assignTWH(Element eElement){
 		title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
 		width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
 		height = eElement.getElementsByTagName(HEIGHT).item(FIRST).getTextContent();
+		randomAssign = eElement.getElementsByTagName(RANDOMASSIGN).item(FIRST).getTextContent();
+		states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
+		grid = eElement.getElementsByTagName(GRID).item(FIRST).getTextContent();
+		if(!randomAssign.equals("True")) states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
 	}
 	
 	public DataType getData() {

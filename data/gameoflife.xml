@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <data gameType="GameOfLife">
 <title>Game of Life</title>
+<randomAssign>True</randomAssign>
 <width>10</width>
 <height>10</height>
+<grid>True</grid>
+<states>dead,alive</states>
 </data>
