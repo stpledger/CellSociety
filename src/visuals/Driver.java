@@ -278,7 +278,7 @@ public class Driver {
 		else {
 			init = simStates;
 			if(simStates.size()<width*height) {
-				ArrayList<String> diffStates = simStates;//should use a proper holder of all simulation states
+				ArrayList<String> diffStates = simulation.getStates();//should use a proper holder of all simulation states
 				for(int i=simStates.size();i<=width*height;i++) {
 					int temp = (int)(Math.random()*diffStates.size());
 					init.add(diffStates.get(temp));

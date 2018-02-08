@@ -7,6 +7,11 @@ import javafx.scene.shape.Shape;
 
 public class RPSCell extends BasicCell {
 
+	private final String RED = "red";
+	private final String BLUE = "blue";
+	private final String GREEN = "green";
+	private final String WHITE = "white";
+	
 	private int myCurrentStrength;
 	private int myNextStrength;
 	
@@ -19,38 +24,38 @@ public class RPSCell extends BasicCell {
 	@Override
 	public void assignNextState(Collection<Cell> cells, Simulation sim) {
 		RPSCell neighbor = (RPSCell) this.getNeighbors().get(new Random().nextInt(this.getNeighbors().size()));
-		if(this.getCurrentState().equals("white")) {
-			if(!neighbor.getCurrentState().equals("white") && neighbor.getCurrentStrength()<9){
+		if(this.getCurrentState().equals(WHITE)) {
+			if(!neighbor.getCurrentState().equals(WHITE) && neighbor.getCurrentStrength()<9){
 				this.setNextState(neighbor.getCurrentState());
 				this.setNextStrength(neighbor.getCurrentStrength()+1);
 			}
 			else {
-				this.setNextState("white");
+				this.setNextState(WHITE);
 				this.setNextStrength(0);
 			}
 		}
-		else if(this.getCurrentState().equals("red")){
-			if(neighbor.getCurrentState().equals("green")) {
-				eatenBy("green", neighbor.getCurrentStrength());
+		else if(this.getCurrentState().equals(RED)){
+			if(neighbor.getCurrentState().equals(GREEN)) {
+				eatenBy(GREEN, neighbor.getCurrentStrength());
 			}
 			else {
-				remain("red", this.getCurrentStrength());
+				remain(RED, this.getCurrentStrength());
 			}
 		}
-		else if(this.getCurrentState().equals("green")){
-			if(neighbor.getCurrentState().equals("blue")) {
-				eatenBy("blue", neighbor.getCurrentStrength());
+		else if(this.getCurrentState().equals(GREEN)){
+			if(neighbor.getCurrentState().equals(BLUE)) {
+				eatenBy(BLUE, neighbor.getCurrentStrength());
 			}
 			else {
-				remain("green", this.getCurrentStrength());
+				remain(GREEN, this.getCurrentStrength());
 			}
 		}
-		else if(this.getCurrentState().equals("blue")){
-			if(neighbor.getCurrentState().equals("red")) {
-				eatenBy("red", neighbor.getCurrentStrength());
+		else if(this.getCurrentState().equals(BLUE)){
+			if(neighbor.getCurrentState().equals(RED)) {
+				eatenBy(RED, neighbor.getCurrentStrength());
 			}
 			else {
-				remain("blue", this.getCurrentStrength());
+				remain(BLUE, this.getCurrentStrength());
 			}
 		}
 	}
