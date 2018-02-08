@@ -6,6 +6,7 @@ public abstract class DataType {
 	protected String width;
 	protected String height;
 	private static final String DEFAULT = "10";
+	private static final String EMPTY = "";
 	
 	public String getGameType() {
 		return GameType;
@@ -38,13 +39,13 @@ public abstract class DataType {
 		return Integer.parseInt(height);
 	}
 	public void init(String SetW, String SetH) {
-		if(SetW.equals("") && SetH.equals("")) {
+		if(SetW.equals(EMPTY) && SetH.equals(EMPTY)) {
 			setWidth(DEFAULT);
 			setHeight(DEFAULT);
-		}else if(SetW.equals("") && !SetH.equals("")){
+		}else if(SetW.equals(EMPTY) && !SetH.equals(EMPTY)){
 			setWidth(DEFAULT);
 			setHeight(SetH);
-		}else if(!SetW.equals("") && SetH.equals("")) {
+		}else if(!SetW.equals(EMPTY) && SetH.equals(EMPTY)) {
 			setWidth(SetW);
 			setHeight(DEFAULT);
 		}else {

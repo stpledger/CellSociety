@@ -11,4 +11,7 @@ public class SegregationData extends DataType{
 	public double getRatio() {
 		return ratio;
 	}
+	public void setRatio(double newVal) {
+		ratio = newVal;
+	}
 }

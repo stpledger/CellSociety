@@ -22,5 +22,10 @@ public class WatorData extends DataType{
 	public int getFishEnergy() {
 		return fishEnergy;
 	}
-	
+	public void setStartEnergy(int newV) {
+		startEnergy = newV;
+	}
+	public void setReproduction(int newV) {
+		reproduction = newV;
+	}
 }

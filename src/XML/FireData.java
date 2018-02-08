@@ -23,5 +23,8 @@ public class FireData extends DataType {
 	public int getFireY() {
 		return fireY;
 	}
+	public void setProbCatch(double newVal) {
+		fireCatch = newVal;
+	}
 
 }
