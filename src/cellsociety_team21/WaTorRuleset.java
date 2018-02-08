@@ -56,7 +56,7 @@ public class WaTorRuleset extends Ruleset {
 					potentialDestinations.add(neighbor);
 				}
 			}
-			System.out.println("Fish has this many potential destintions: "+potentialDestinations.size());
+			System.out.println("Fish has this many potential destinations: "+potentialDestinations.size());
 			if(potentialDestinations.size()!=0) {
 				WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
 				if(cell.getCurrentTimeTilReproduction()<=0) {
