@@ -57,6 +57,8 @@ public class Driver {
 	private static final String REPRODUCTIONTIME = "Reproduction Time:";
 	private static final String INTERROR = "Enter an integer";
 	private static final String DOUBLEERROR = "Enter a double";
+	private static final String GRIDLINE = "Toggle Grid";
+	private static final String STEP = "Step";
     private Group root;
     private Stage stage;
     private Scene scene;
@@ -118,14 +120,15 @@ public class Driver {
 		Button stop = (Button) nodeMaker(STOP, 0, BUTTONHEIGHT*2, BUTTON);
 		Button reset = (Button) nodeMaker(RESET, 0, BUTTONHEIGHT*3, BUTTON);
 		Button submit = (Button) nodeMaker(SUBMIT, 0, BUTTONHEIGHT*4, BUTTON);
-		Button grid = (Button) nodeMaker()
+		Button gridLINES = (Button) nodeMaker(GRIDLINE, BUTTONHEIGHT, 0, BUTTON);
+		Button steps = (Button) nodeMaker(STEP, BUTTONHEIGHT, BUTTONHEIGHT, BUTTON);
 		Text col = (Text) nodeMaker(COLUMNS, 0, BUTTONHEIGHT*5, TEXT);
 		TextField widthText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*5), TEXTFIELD);
 		widthText.setText(Integer.toString(width));
 		Text row = (Text) nodeMaker(ROWS, 0, BUTTONHEIGHT*6, TEXT);
 		TextField heightText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*6), TEXTFIELD);
 		heightText.setText(Integer.toString(height));
-		root.getChildren().addAll(mainMenu, start, stop, reset, submit, col, row, widthText, heightText);
+		root.getChildren().addAll(mainMenu, start, stop, reset, submit, col, row, widthText, heightText, gridLINES, steps);
 		if(gameType.equals(FIRE)) {
 			Text pFire = (Text) nodeMaker(PFIRE, 0, BUTTONHEIGHT*7, TEXT);
 			pFireText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*7), TEXTFIELD);
@@ -148,6 +151,18 @@ public class Driver {
 			root.getChildren().addAll(startE, sEnergy, reproT, repro);
 		}
 		initGrid();
+		steps.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				step(SECOND_DELAY);
+			}
+		});
+		gridLINES.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				gridLines = !gridLines;
+				setUpSim();
+				pause = true;
+			}
+		});
 		mainMenu.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				if(animation!=null)animation.stop();
