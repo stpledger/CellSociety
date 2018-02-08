@@ -1,6 +1,7 @@
 package visuals;
 
 import XML.*;
+import visuals.*;
 import java.io.File;
 
 import javafx.event.ActionEvent;
@@ -57,7 +58,8 @@ public class Gui {
 	        			sim.setText(SIMULATION+NOFILE);
 	        			return;
 	        		}
-	        		Simulation run = new Simulation(stage, scene, gameType, data);
+	        		//Simulation run = new Simulation(stage, scene, gameType, data);
+	        		Driver run = new Driver(stage, scene, gameType, data);
 	        }
 	    });
 	    fileSelector.setOnAction(new EventHandler<ActionEvent>() {

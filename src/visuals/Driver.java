@@ -23,7 +23,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Simulation {
+public class Driver {
 	public static final int FRAMES_PER_SECOND = 10;
     public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
     public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
@@ -64,7 +64,6 @@ public class Simulation {
     private Timeline animation;
     private int width, height;
     private boolean pause;
-    private Ruleset ruleset;
     private StandardGrid grid;
     private double CELLSIZE;
     private GoLData gol;
@@ -75,9 +74,10 @@ public class Simulation {
     private boolean randomAssign;
     private boolean gridLines;
     private ArrayList<String> simStates;
+    private Simulation simulation;
     //TODO: add validation checking for grid values given, grid lines and speed of sim
 
-	public Simulation(Stage stage, Scene scene, String gameType, DataType data) {
+	public Driver (Stage stage, Scene scene, String gameType, DataType data) {
 		this.stage = stage;
 		this.scene = scene;
 		this.gameType = gameType;
@@ -152,15 +152,15 @@ public class Simulation {
 				if(animation!=null)animation.stop();
 				Gui restart = new Gui(stage);
 				Scene scene = restart.getScene();
-		        stage.setScene(scene);
-		        stage.show();
+				stage.setScene(scene);
+				stage.show();
 			}
 		});
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				pause = false;
 				KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-		                e -> step(SECOND_DELAY));
+						e -> step(SECOND_DELAY));
 				if(animation!=null) {
 					animation.stop();
 				}
@@ -238,18 +238,18 @@ public class Simulation {
 	}
 	private void initGrid() {
 		if(gameType.equals(GAMEOFLIFE)) {
-			ruleset = new GOLRuleset();
+			simulation = new GOLSimulation();
 		}else if(gameType.equals(FIRE)) {
-			ruleset = new FireRuleset(fire.getProbCatch());
+			simulation = new FireSimulation(fire.getProbCatch());
 		}else if(gameType.equals(SEGREGATION)) {
-			ruleset = new SegregationRuleset(seg.getRatio());
+			simulation = new SegregationSimulation(seg.getRatio());
 		}else {
-			ruleset = new WaTorRuleset(wator.getStartEnergy(), wator.getReproduction(), wator.getFishEnergy());
+			simulation = new WaTorSimulation(wator.getStartEnergy(), wator.getReproduction(), wator.getFishEnergy());
 		}
 		
 		ArrayList<String> initStates = new ArrayList<String>();
 		initStates = initializeStates(initStates);
-		HashMap<String, Paint> colors = ruleset.getStateColors();
+		HashMap<String, Paint> colors = simulation.getStateColors();
 		if(gameType.equals(WATOR)) {
 			grid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, wator.getStartEnergy(), wator.getReproduction());
 		}
@@ -278,7 +278,7 @@ public class Simulation {
 		else {
 			init = simStates;
 			if(simStates.size()<width*height) {
-				ArrayList<String> diffStates = ruleset.getStates();
+				ArrayList<String> diffStates = simStates;//should use a proper holder of all simulation states
 				for(int i=simStates.size();i<=width*height;i++) {
 					int temp = (int)(Math.random()*diffStates.size());
 					init.add(diffStates.get(temp));
@@ -290,6 +290,15 @@ public class Simulation {
 
 	private void step(double secondDelay) {
 		if(pause)return;
-		ruleset.updateGrid(grid);
+		
+		if(gameType.equals(WATOR)) {
+			simulation.updateGrid(grid);
+		}
+		else {
+		 
+		simulation.updateGrid(grid);
+		
+		}
+		 
 	}
 }

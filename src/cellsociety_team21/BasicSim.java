@@ -11,7 +11,7 @@ import javafx.scene.paint.Paint;
  * @author benauriemma
  *
  */
-public abstract class Ruleset {
+public abstract class BasicSim implements Simulation {
 	
 	private HashMap<String, Paint> myStateColors;
 	private ArrayList<String> myStates;
@@ -20,7 +20,7 @@ public abstract class Ruleset {
 	 * @param states possible in this simulation
 	 * @param stateColors , keys are all possible states, and their values are what color they should be displayed as
 	 */
-	public Ruleset() {
+	public BasicSim() {
 		myStates = new ArrayList<String>();
 		myStateColors = new HashMap<String, Paint>();
 	}
@@ -30,7 +30,14 @@ public abstract class Ruleset {
 	 * It should iterate through each cell and use helper methods to determine and assign their next state, then call grid.switchStates() to switch to the next generation
 	 * @param grid is the Grid object that should be updated
 	 */
-	abstract public void updateGrid(Grid grid);
+	public void updateGrid(Grid grid) {
+		for(Cell cell : grid.getCells()) {
+			cell.assignNextState(grid.getCells(), this);;
+		}
+		for(Cell cell : grid.getCells()) {
+			cell.switchState(this.getStateColors());;
+		}
+	}
 
 	/**
 	 * @return myStateColors to be passed to Grid so that is can set colors
