@@ -71,10 +71,13 @@ public class WaTorCell extends BasicCell {
 	}
 
 	private void fishAssign(Collection<Cell> cells, WaTorSimulation waTorSim) {
-		System.out.println("Fish has this many neighbors: "+this.getNeighbors().size());
+		if(this.getNextState()!=null) {
+			return;
+		}
+		//System.out.println("Fish has this many neighbors: "+this.getNeighbors().size());
 		ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
 		this.findFishDestinations(potentialDestinations);
-		System.out.println("Fish has this many potential destintions: "+potentialDestinations.size());
+		//System.out.println("Fish has this many potential destintions: "+potentialDestinations.size());
 		if(potentialDestinations.size()!=0) {
 			WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
 
@@ -86,7 +89,7 @@ public class WaTorCell extends BasicCell {
 			}
 		}
 		else {
-			System.out.println("stayed");
+			//System.out.println("stayed");
 			this.setNextState("fish");
 			this.setNextTimeTilReproduction(this.getCurrentTimeTilReproduction()-1);
 			this.setNextEnergy(0);
@@ -119,7 +122,7 @@ public class WaTorCell extends BasicCell {
 	}
 
 	private void sharkAssign(Collection<Cell> cells, WaTorSimulation waTorSim) {
-		System.out.println("Shark has this many neighbors: "+this.getNeighbors().size());
+		//System.out.println("Shark has this many neighbors: "+this.getNeighbors().size());
 		if(this.getCurrentEnergy()==0) {
 			this.setNextState("water");
 			this.setNextEnergy(0);
@@ -131,7 +134,7 @@ public class WaTorCell extends BasicCell {
 			fishAvailable = findSharkDestinations(potentialDestinations);
 			//System.out.println("cell.getNeighbors: "+cell.getNeighbors());
 
-			System.out.println("Shark has this many potential destinations: "+potentialDestinations.size());
+			//System.out.println("Shark has this many potential destinations: "+potentialDestinations.size());
 			if(potentialDestinations.size()!=0) {
 				WaTorCell destination = (WaTorCell) potentialDestinations.get(new Random().nextInt(potentialDestinations.size()));
 				int destNextEnergy;
