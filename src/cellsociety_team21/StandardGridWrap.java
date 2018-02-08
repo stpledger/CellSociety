@@ -9,7 +9,7 @@ public class StandardGridWrap extends StandardGrid {
 
 	public StandardGridWrap(int row, int col, ArrayList<String> initStates, double cellSize,
 			HashMap<String, Paint> colors) {
-		super(row, col, initStates, cellSize, colors);
+		super(row, col, initStates, cellSize, colors, "");
 		assignNeighborsWrap(row, col);
 	}
 

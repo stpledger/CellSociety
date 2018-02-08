@@ -254,7 +254,7 @@ public class Driver {
 			grid = new WaTorGrid(width, height, initStates, CELLSIZE, colors, wator.getStartEnergy(), wator.getReproduction());
 		}
 		else {
-			grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors);
+			grid = new StandardGridDiag(width, height, initStates, CELLSIZE, colors, gameType);
 		}
 		setUpGridVisuals(grid.getCellMap());
 	}
@@ -289,16 +289,7 @@ public class Driver {
 	}
 
 	private void step(double secondDelay) {
-		if(pause)return;
-		
-		if(gameType.equals(WATOR)) {
-			simulation.updateGrid(grid);
-		}
-		else {
-		 
+		if(pause)return;	 
 		simulation.updateGrid(grid);
-		
-		}
-		 
 	}
 }

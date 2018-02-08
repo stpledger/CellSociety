@@ -7,10 +7,16 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
 public class StandardGrid extends Grid{
+	private static final String GAMEOFLIFE = "GameOfLife";
+    private static final String SEGREGATION = "Segregation";
+    private static final String WATOR = "Wator";
+    private static final String FIRE = "Fire";
 	private HashMap<Point, Cell> cellMap; 
+	private String gameType;
 	
-	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
+	public StandardGrid(int row, int col, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors, String game){
 		this.cellMap = new HashMap<Point, Cell>();
+		this.gameType = game;
 		updateGrid(row, col, initStates, cellSize, colors);
 		assignNeighborsNoDiag();
 	}
@@ -26,7 +32,10 @@ public class StandardGrid extends Grid{
 				int x = i * (int) cellSize;
 				int y = j * (int) cellSize;
 				//THE FOLLOWING LINE MUST CHANGE TO CHANGE SIMULATIONS.  NEED TO MAKE IT RESPOND TO GUI/XML INPUT INSTEAD
-				Cell cell = new SegregationCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
+				Cell cell;
+				if(gameType.equals(SEGREGATION)) cell = new SegregationCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
+				else if(gameType.equals(GAMEOFLIFE)) cell = new GOLCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
+				else cell = new FireCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
 				cellMap.put(point, cell);
 			}
 		}
