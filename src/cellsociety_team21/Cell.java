@@ -53,7 +53,7 @@ public interface Cell {
 	 * To be called by a grid who is assigning neighbors
 	 * @param neighbor
 	 */
-	public void addNeighbor(Cell neighbor);
+	public void addNeighbor(String whichNeighbor, Cell neighbor);
 	
 	/**
 	 * Set the location on screen of this cell

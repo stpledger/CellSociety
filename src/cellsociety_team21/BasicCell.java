@@ -1,6 +1,7 @@
 package cellsociety_team21;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,14 +16,14 @@ public abstract class BasicCell implements Cell {
 	private String myNextState;
 	private int myXPos;
 	private int myYPos;
-	private ArrayList<Cell> myNeighbors;
+	private Map<String, Cell> myNeighbors;
 	
 	BasicCell(Shape shape, String initState, int x, int y){
 		this.myShape = shape;
 		this.myCurrentState = initState;
 		this.myXPos = x;
 		this.myYPos = y;
-		myNeighbors = new ArrayList<Cell>();
+		myNeighbors = new HashMap<String, Cell>();
 	}
 
 	public Shape getShape(){
@@ -47,8 +48,8 @@ public abstract class BasicCell implements Cell {
 		this.setColor(stateColors.get(myCurrentState));
 	}
 	
-	public void addNeighbor(Cell neighbor){
-		myNeighbors.add(neighbor);
+	public void addNeighbor(String whichNeighbor, Cell neighbor){
+		myNeighbors.put(whichNeighbor, neighbor);
 	}
 	
 	public void setLocation(int x, int y){
@@ -65,6 +66,10 @@ public abstract class BasicCell implements Cell {
 	}
 	
 	protected List<Cell> getNeighbors(){
+		return (List<Cell>) myNeighbors.values();
+	}
+	
+	public Map<String, Cell> getNeighborsMap(){
 		return myNeighbors;
 	}
 	
@@ -72,7 +77,7 @@ public abstract class BasicCell implements Cell {
 		myCurrentState = state;
 	}
 	
-	private void setColor(Paint color){
+	protected void setColor(Paint color){
 		myShape.setFill(color);
 	}
 	
