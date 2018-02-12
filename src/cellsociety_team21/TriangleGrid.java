@@ -8,7 +8,6 @@ import java.util.HashMap;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import sun.tools.jar.resources.jar;
 
 public class TriangleGrid extends Grid {
 
@@ -35,13 +34,13 @@ public class TriangleGrid extends Grid {
 			GOLInit(row, col, initStates, cellSize, colors);
 		}
 		if(gameType.equals(SEGREGATION)){
-			SegInit(row, col, initStates, cellSize, colors);
+			//SegInit(row, col, initStates, cellSize, colors);
 		}
 		if(gameType.equals(WATOR)){
-			WatorInit(row, col, initStates, cellSize, colors);
+			//WatorInit(row, col, initStates, cellSize, colors);
 		}
 		if(gameType.equals(FIRE)){
-			GFireInit(row, col, initStates, cellSize, colors);
+			//GFireInit(row, col, initStates, cellSize, colors);
 		}
 	}
 	
@@ -55,7 +54,7 @@ public class TriangleGrid extends Grid {
 	
 	private Shape upTriangle(int i, int j, ArrayList<String> initStates, double cellSize, HashMap<String, Paint> colors){
 		double topCoord = j * cellSize + (0.5 * cellSize);
-		double leftCoord = 
+		double leftCoord;
 		return null;
 	}
 	
