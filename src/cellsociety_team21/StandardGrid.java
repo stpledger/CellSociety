@@ -66,7 +66,20 @@ public class StandardGrid extends Grid{
 					}
 				}
 			}*/
-			
+			int x = (int) myPoint.getX();
+			int y = (int) myPoint.getY();
+			if (getCellMap().containsKey(new Point(x, y-1))){
+				getCellMap().get(myPoint).addNeighbor("west",getCellMap().get(new Point(x-1, y-1)));
+			}
+			if (getCellMap().containsKey(new Point(x, y+1))){
+				getCellMap().get(myPoint).addNeighbor("east",getCellMap().get(new Point(x-1, y+1)));
+			}
+			if (getCellMap().containsKey(new Point(x+1, y))){
+				getCellMap().get(myPoint).addNeighbor("south",getCellMap().get(new Point(x+1, y-1)));
+			}
+			if (getCellMap().containsKey(new Point(x-1, y))){
+				getCellMap().get(myPoint).addNeighbor("north",getCellMap().get(new Point(x+1, y+1)));
+			}
 			//cellMap.get(myPoint).setNeighbors(neighbors);
 		}
 	}
