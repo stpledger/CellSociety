@@ -38,7 +38,7 @@ public class Gui {
 	private Group root;
 	private XMLParser parsed;
 	
-	public Gui(Stage stage) {
+	public Gui(Stage stage, boolean dataBad) {
 		this.stage = stage;
 		this.root = new Group();
 	    this.scene = new Scene(root, SIZEW, SIZEH);
@@ -47,6 +47,7 @@ public class Gui {
 	    splash.setFont(Font.font(FONT, FontWeight.NORMAL,20));
 	    Text sim = (Text) nodeMaker(SIMULATION, (SIZEW/2)-120, 70, TEXT);
 	    sim.setFont(Font.font(FONT, FontWeight.NORMAL,20));
+	    if(dataBad) sim.setText(SIMULATION+NOFILE);
 	    Button calculateButton = (Button) nodeMaker(SIM, 2*(SIZEW/4), SIZEH - 50, BUTTON);
 	    Button fileSelector = (Button) nodeMaker(FILE, (SIZEW/4), SIZEH - 50, BUTTON);
 	    root.getChildren().addAll(splash, sim, calculateButton, fileSelector);
@@ -58,7 +59,6 @@ public class Gui {
 	        			sim.setText(SIMULATION+NOFILE);
 	        			return;
 	        		}
-	        		//Simulation run = new Simulation(stage, scene, gameType, data);
 	        		Driver run = new Driver(stage, scene, gameType, data);
 	        }
 	    });
