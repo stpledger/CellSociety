@@ -71,7 +71,7 @@ public class Gui {
 	    					sim.setText(SIMULATION + NOFILE);
 	    					return;
 	    				}
-	    				sim.setText(SIMULATION + data.getGameType());
+	    				sim.setText(SIMULATION + data.getTitle());
 	    			}
 	    		}
 	    });

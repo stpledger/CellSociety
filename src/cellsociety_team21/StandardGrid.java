@@ -13,6 +13,7 @@ public class StandardGrid extends Grid{
     private static final String SEGREGATION = "Segregation";
     private static final String WATOR = "Wator";
     private static final String FIRE = "Fire";
+    private static final String FORAGING = "Ants";
 	private HashMap<Point, Cell> cellMap; 
 	private String gameType;
 	
@@ -37,6 +38,7 @@ public class StandardGrid extends Grid{
 				Cell cell;
 				if(gameType.equals(SEGREGATION)) cell = new SegregationCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
 				else if(gameType.equals(GAMEOFLIFE)) cell = new GOLCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
+				else if(gameType.equals(FORAGING)) cell = new ForagingCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
 				else cell = new FireCell(new Rectangle(cellSize, cellSize, colors.get(initStates.get((i * row) + j))), initStates.get((i * row) + j), x, y);
 				cellMap.put(point, cell);
 			}
