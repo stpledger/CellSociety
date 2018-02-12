@@ -9,8 +9,9 @@ public class ForagingSimulation extends BasicSim {
 	private double myEvaporation;
 	private double myMaxPheromones;
 	private int myAntsBornPerTime;
+	private int myStartingAge;
 	
-	ForagingSimulation(int maxAntsPerCell, double diffusionRatio, double evaporationRatio, double maxPheromones, int antsBornPerTime){
+	ForagingSimulation(int maxAntsPerCell, double diffusionRatio, double evaporationRatio, double maxPheromones, int antsBornPerTime, int startingAge){
 		super();
 		setMaxAntsPerCell(maxAntsPerCell);
 		setDiffusion(diffusionRatio);
@@ -23,8 +24,23 @@ public class ForagingSimulation extends BasicSim {
 		this.getStateColors().put("nest", Color.BLUE);
 		this.getStateColors().put("food", Color.BROWN);
 		this.getStateColors().put("GROUND", Color.BLACK);
+		this.setStartingAge(startingAge);
 	}
 
+	@Override
+	public void updateGrid(Grid grid) {
+		for(Cell cell : grid.getCells()) {
+			cell.assignNextState(grid.getCells(), this);
+		}
+		for(Cell cell : grid.getCells()) {
+			((ForagingCell) cell).evaporate(this);
+			((ForagingCell) cell).diffuse(this);
+		}
+		for(Cell cell : grid.getCells()) {
+			cell.switchState(this.getStateColors());
+		}
+	}
+	
 	public int getMaxAntsPerCell() {
 		return myMaxAntsPerCell;
 	}
@@ -63,6 +79,14 @@ public class ForagingSimulation extends BasicSim {
 
 	public void setAntsBornPerTime(int myAntsBornPerTime) {
 		this.myAntsBornPerTime = myAntsBornPerTime;
+	}
+
+	public int getStartingAge() {
+		return myStartingAge;
+	}
+
+	public void setStartingAge(int myStartingAge) {
+		this.myStartingAge = myStartingAge;
 	}
 	
 }
