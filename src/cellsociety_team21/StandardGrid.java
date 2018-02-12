@@ -1,7 +1,9 @@
 package cellsociety_team21;
 
+import java.util.List;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
@@ -40,7 +42,7 @@ public class StandardGrid extends Grid{
 			}
 		}
 	}
-	public ArrayList<Cell> getCells(){
+	public Collection<Cell> getCells(){
 		return new ArrayList<Cell>(cellMap.values());
 	}
 	
@@ -69,16 +71,16 @@ public class StandardGrid extends Grid{
 			int x = (int) myPoint.getX();
 			int y = (int) myPoint.getY();
 			if (getCellMap().containsKey(new Point(x, y-1))){
-				getCellMap().get(myPoint).addNeighbor("west",getCellMap().get(new Point(x-1, y-1)));
+				getCellMap().get(myPoint).addNeighbor("west",getCellMap().get(new Point(x, y-1)));
 			}
 			if (getCellMap().containsKey(new Point(x, y+1))){
-				getCellMap().get(myPoint).addNeighbor("east",getCellMap().get(new Point(x-1, y+1)));
+				getCellMap().get(myPoint).addNeighbor("east",getCellMap().get(new Point(x, y+1)));
 			}
 			if (getCellMap().containsKey(new Point(x+1, y))){
-				getCellMap().get(myPoint).addNeighbor("south",getCellMap().get(new Point(x+1, y-1)));
+				getCellMap().get(myPoint).addNeighbor("south",getCellMap().get(new Point(x+1, y)));
 			}
 			if (getCellMap().containsKey(new Point(x-1, y))){
-				getCellMap().get(myPoint).addNeighbor("north",getCellMap().get(new Point(x+1, y+1)));
+				getCellMap().get(myPoint).addNeighbor("north",getCellMap().get(new Point(x-1, y)));
 			}
 			//cellMap.get(myPoint).setNeighbors(neighbors);
 		}

@@ -1,7 +1,8 @@
 package cellsociety_team21;
 
+import java.util.List;
 import java.awt.Point;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import javafx.scene.paint.Paint;
@@ -9,7 +10,7 @@ import javafx.scene.paint.Paint;
 
 public abstract class Grid {
 	
-	public abstract ArrayList<Cell> getCells();
+	public abstract Collection<Cell> getCells();
 
 	public abstract HashMap<Point, Cell> getCellMap();
 	
