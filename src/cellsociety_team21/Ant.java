@@ -8,8 +8,9 @@ public class Ant {
 
 	private ArrayList<String> directionList;
 	private boolean hasFoodItem;
+	private int myAge;
 
-	Ant(){
+	Ant(int startingAge){
 		directionList = new ArrayList<String>();
 		directionList.add("north");
 		directionList.add("northeast");
@@ -19,9 +20,14 @@ public class Ant {
 		directionList.add("southwest");
 		directionList.add("west");
 		directionList.add("northwest");
+		myAge = startingAge;
 	}
 
 	public void forage(Map<String, Cell> neighbors, Cell currentCell, Simulation sim){
+		myAge--;
+		if(myAge==0) {
+			return;
+		}
 		if(currentCell.getCurrentState().equals("nest") && hasFoodItem) {
 			dropFood();
 		}
@@ -33,7 +39,17 @@ public class Ant {
 			lookForNest(neighbors, currentCell);
 		}
 		else {
+			dropHomePheromones((ForagingCell) currentCell, neighbors, (ForagingSimulation) sim);
 			lookForFood(neighbors, currentCell);
+		}
+	}
+
+	private void dropHomePheromones(ForagingCell currentCell, Map<String, Cell> neighbors, ForagingSimulation sim) {
+		if(currentCell.getCurrentState().equals("nest")) {
+			topOffHomePheromones(currentCell, sim);
+		}
+		else {
+			addToHomePheromones(currentCell, neighbors, sim);
 		}
 	}
 
@@ -49,13 +65,34 @@ public class Ant {
 	private void addToFoodPheromones(ForagingCell currentCell, Map<String, Cell> neighbors, ForagingSimulation sim) {
 		double max = findMaxFoodPheromones(neighbors);
 		double desired = max-2;
-		double deposit = desired - currentCell.getCurrentHomePhero();
+		double deposit = desired - currentCell.getCurrentFoodPhero();
 		if(deposit>0) {
 			currentCell.setNextFoodPhero(deposit);
 		}
 	}
+	
+	private void addToHomePheromones(ForagingCell currentCell, Map<String, Cell> neighbors, ForagingSimulation sim) {
+		double max = findMaxHomePheromones(neighbors);
+		double desired = max-2;
+		double deposit = desired - currentCell.getCurrentHomePhero();
+		if(deposit>0) {
+			currentCell.setNextHomePhero(deposit);
+		}
+	}
+
+
 
 	private double findMaxFoodPheromones(Map<String, Cell> neighbors) {
+		double max = 0;
+		for(Cell neighbor : neighbors.values()) {
+			if(((ForagingCell) neighbor).getCurrentFoodPhero()>max) {
+				max = ((ForagingCell) neighbor).getCurrentFoodPhero();
+			}
+		}
+		return max;
+	}
+	
+	private double findMaxHomePheromones(Map<String, Cell> neighbors) {
 		double max = 0;
 		for(Cell neighbor : neighbors.values()) {
 			if(((ForagingCell) neighbor).getCurrentHomePhero()>max) {
@@ -67,6 +104,10 @@ public class Ant {
 
 	private void topOffFoodPheromones(ForagingCell currentCell, ForagingSimulation sim) {
 		currentCell.setNextFoodPhero(sim.getMaxPheromones());
+	}
+	
+	private void topOffHomePheromones(ForagingCell currentCell, ForagingSimulation sim) {
+		currentCell.setNextHomePhero(sim.getMaxPheromones());
 	}
 
 	private void lookForNest(Map<String, Cell> neighbors, Cell currentCell) {
@@ -86,6 +127,26 @@ public class Ant {
 			moveTo(destination);
 		}
 	}
+	
+	private void lookForFood(Map<String, Cell> neighbors, Cell currentCell) {
+		String orientation = getFoodOrientation(neighbors);
+		ArrayList<Cell> potentialDestinations = new ArrayList<Cell>();
+		addForwardDestinations(potentialDestinations, orientation, neighbors);
+		potentialDestinations = removeIneligibleDestinations(potentialDestinations);
+		if(potentialDestinations.size()==0) {
+			addAllDestinations(potentialDestinations, orientation, neighbors);
+			potentialDestinations = removeIneligibleDestinations(potentialDestinations);
+		}
+		if(potentialDestinations.size()==0) {
+			moveTo((ForagingCell) currentCell);
+		}
+		else {
+			ForagingCell destination = pickDestination(potentialDestinations);
+			moveTo(destination);
+		}
+	}
+
+
 
 	private ForagingCell pickDestination(ArrayList<Cell> potentialDestinations) {
 		ArrayList<Cell> weightedList = new ArrayList<Cell>();
@@ -137,6 +198,18 @@ public class Ant {
 		return bestDirection;
 	}
 
+	private String getFoodOrientation(Map<String, Cell> neighbors) {
+		double maxPheromones = -1;
+		String bestDirection = "";
+		for(String direction : directionList) {
+			if(((ForagingCell) neighbors.get(direction)).getCurrentFoodPhero()>maxPheromones) {
+				maxPheromones = ((ForagingCell) neighbors.get(direction)).getCurrentFoodPhero();
+				bestDirection = direction;
+			}
+		}
+		return bestDirection;
+	}
+	
 	private ArrayList<String> getForwardDirections(String orientation){
 		int index = 0;
 		ArrayList<String> ret = new ArrayList<String>();
