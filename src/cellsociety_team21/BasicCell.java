@@ -66,7 +66,7 @@ public abstract class BasicCell implements Cell {
 	}
 	
 	protected List<Cell> getNeighbors(){
-		return (List<Cell>) myNeighbors.values();
+		return new ArrayList<Cell>(myNeighbors.values());
 	}
 	
 	public Map<String, Cell> getNeighborsMap(){

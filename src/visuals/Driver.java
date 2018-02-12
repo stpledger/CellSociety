@@ -1,5 +1,6 @@
 package visuals;
 
+import java.awt.Desktop;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class Driver {
     private static final String GAMEOFLIFE = "GameOfLife";
     private static final String SEGREGATION = "Segregation";
     private static final String WATOR = "Wator";
+    private static final String FORAGING = "Ants";
     private static final String FIRE = "Fire";
     private static final String MAIN = "Main";
     private static final String START = "Start";
@@ -62,6 +64,9 @@ public class Driver {
 	private static final String DOUBLEERROR = "Enter a double";
 	private static final String GRIDLINE = "Toggle Grid";
 	private static final String STEP = "Step";
+	private static final String SAVESTATES = "Save";
+	private static final String FPS = "FPS: ";
+	private static final String FPSDOUBLE = "FPS: %.2f";
     private Group root;
     private Stage stage;
     private Scene scene;
@@ -75,6 +80,7 @@ public class Driver {
     private FireData fire;
     private SegregationData seg;
     private WatorData wator;
+    private ForageData forage;
     private TextField repro, sEnergy, segRatio, pFireText;
     private boolean randomAssign;
     private boolean gridLines;
@@ -100,6 +106,7 @@ public class Driver {
 		else if(gameType.equals(FIRE)) this.fire = (FireData) data;
 		else if(gameType.equals(SEGREGATION)) this.seg = (SegregationData) data;
 		else if(gameType.equals(WATOR)) this.wator = (WatorData) data;
+		else if(gameType.equals(FORAGING)) this.forage = (ForageData) data;
 		this.CELLSIZE = (SIZEH-10-3*BUTTONHEIGHTPAD)/(Math.max(width, height));
 		setUpSim();
 	}
@@ -135,11 +142,12 @@ public class Driver {
 		Button gridLINES = (Button) nodeMaker(GRIDLINE, BUTTONHEIGHT, 0, BUTTON);
 		Button steps = (Button) nodeMaker(STEP, BUTTONHEIGHT, BUTTONHEIGHT, BUTTON);
 		Text col = (Text) nodeMaker(COLUMNS, 0, BUTTONHEIGHT*5, TEXT);
+		Button getSettings = (Button) nodeMaker(SAVESTATES, BUTTONHEIGHT, BUTTONHEIGHT*2, BUTTON);
 		Slider slider = new Slider();
-		Text sliderLabel = (Text) nodeMaker("FPS: "+ Double.toString(slider.getValue()), BUTTONHEIGHT*5, BUTTONHEIGHT*1.25, TEXT);
+		Text sliderLabel = (Text) nodeMaker(FPS+ Double.toString(slider.getValue()), BUTTONHEIGHT*5, BUTTONHEIGHT*1.25, TEXT);
 		slider.valueProperty().addListener(new ChangeListener<Number>() {
 			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-				sliderLabel.setText(String.format("FPS: %.2f", new_val));
+				sliderLabel.setText(String.format(FPSDOUBLE, new_val));
 				updateFrames(new_val.doubleValue());
 				if(pause || !started) return;
 				animationFrame();
@@ -160,7 +168,7 @@ public class Driver {
 		Text row = (Text) nodeMaker(ROWS, 0, BUTTONHEIGHT*6, TEXT);
 		TextField heightText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*6), TEXTFIELD);
 		heightText.setText(Integer.toString(height));
-		root.getChildren().addAll(slider, sliderLabel, mainMenu, start, stop, reset, submit, col, row, widthText, heightText, gridLINES, steps);
+		root.getChildren().addAll(slider, sliderLabel, mainMenu, start, stop, reset, submit, col, row, widthText, heightText, gridLINES, steps, getSettings);
 		if(gameType.equals(FIRE)) {
 			Text pFire = (Text) nodeMaker(PFIRE, 0, BUTTONHEIGHT*7, TEXT);
 			pFireText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*7), TEXTFIELD);
@@ -252,6 +260,25 @@ public class Driver {
 				pause = true;
 			}
 		});
+		getSettings.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				XMLSaver save;
+				if(gameType.equals(FIRE)) {
+					save = new XMLSaver(fire, grid, gridLines, width, height);
+				}
+				else if(gameType.equals(SEGREGATION)) {
+					save = new XMLSaver(seg, grid, gridLines, width, height);
+				}
+				else if(gameType.equals(WATOR)) {
+					save = new XMLSaver(wator, grid, gridLines, width, height);
+				}else {
+					save = new XMLSaver(gol, grid, gridLines, width, height);
+				}
+				if (!save.isSaved()) {
+					System.out.println("GG");
+				}
+			}
+		});
 		stop.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				pause = true;
@@ -313,6 +340,8 @@ public class Driver {
 			simulation = new GOLSimulation();
 		}else if(gameType.equals(FIRE)) {
 			simulation = new FireSimulation(fire.getProbCatch());
+		}else if(gameType.equals(FORAGING)) {
+			simulation = new ForagingSimulation(forage.getMaxAnts(), forage.getDiff(), forage.getEvap(), forage.getPhero(), forage.getAntsBorn(), forage.getStartAge());
 		}else if(gameType.equals(SEGREGATION)) {
 			simulation = new SegregationSimulation(seg.getRatio());
 		}else {

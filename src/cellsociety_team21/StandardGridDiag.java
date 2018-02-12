@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+
 import javafx.scene.paint.Paint;
 
 public class StandardGridDiag extends StandardGrid {
@@ -20,14 +21,28 @@ public class StandardGridDiag extends StandardGrid {
 
 	private void assignNeighborsDiag(){
 		for (Point myPoint : getCellMap().keySet()){
-			for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i+=2){
+			int x = (int) myPoint.getX();
+			int y = (int) myPoint.getY();
+			if (getCellMap().containsKey(new Point(x-1, y-1))){
+				getCellMap().get(myPoint).addNeighbor("northwest",getCellMap().get(new Point(x-1, y-1)));
+			}
+			if (getCellMap().containsKey(new Point(x-1, y+1))){
+				getCellMap().get(myPoint).addNeighbor("northeast",getCellMap().get(new Point(x-1, y+1)));
+			}
+			if (getCellMap().containsKey(new Point(x+1, y-1))){
+				getCellMap().get(myPoint).addNeighbor("southwest",getCellMap().get(new Point(x+1, y-1)));
+			}
+			if (getCellMap().containsKey(new Point(x+1, y+1))){
+				getCellMap().get(myPoint).addNeighbor("southeast",getCellMap().get(new Point(x+1, y+1)));
+			}
+			/*for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i+=2){
 				for (int j = (int) myPoint.getY() - 1; j < (int) myPoint.getY() + 2; j+=2){
 					Point neighborsPoint = new Point(i, j);
 					if (getCellMap().containsKey(neighborsPoint)){
 						getCellMap().get(myPoint).addNeighbor(getCellMap().get(neighborsPoint));
 					}
 				}
-			}
+			}*/
 		}
 	}
 }
