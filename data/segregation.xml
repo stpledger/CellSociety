@@ -1,10 +1,1 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<data gameType="Segregation">
-<title>Segregation Simulation</title>
-<width>10</width>
-<height>10</height>
-<randomAssign>True</randomAssign>
-<grid>True</grid>
-<ratio>0.3</ratio>
-<states>empty,x,o</states>
-</data>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><data gameType="Segregation"><title>Segregation Simulation</title><width>10</width><height>10</height><randomAssign>False</randomAssign><grid>true</grid><states>empty,empty,o,empty,empty,x,x,o,o,o,x,empty,o,x,x,o,o,x,empty,x,x,o,o,o,o,empty,o,empty,x,x,empty,empty,empty,o,o,o,o,o,o,o,empty,o,x,empty,empty,o,x,x,empty,empty,empty,o,empty,empty,empty,empty,o,empty,x,o,o,x,empty,empty,empty,empty,x,x,o,o,x,empty,o,o,empty,x,o,empty,empty,x,x,empty,x,x,o,o,o,o,x,empty,empty,o,x,empty,o,x,o,o,o,o</states><ratio>0.3</ratio></data>

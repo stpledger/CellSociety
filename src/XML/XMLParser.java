@@ -19,6 +19,7 @@ public class XMLParser {
 	private static final String FIRE = "Fire";
 	private static final String SEGREGATION = "Segregation";
 	private static final String WATOR = "Wator";
+	private static final String FORAGE = "Ants";
 	private static final String GAMETYPE = "gameType";
 	private static final String TITLE = "title";
 	private static final String WIDTH = "width";
@@ -32,6 +33,14 @@ public class XMLParser {
 	private static final String RANDOMASSIGN = "randomAssign";
 	private static final String GRID = "grid";
 	private static final String STATES = "states";
+	private static final String TRUE = "True";
+	private static final String MAXANTS = "maxAntsPerCell";
+	private static final String DIFF = "diffusion";
+	private static final String EVAP = "evaporation";
+	private static final String PHERO = "phero";
+	private static final String ANTSBORN = "antsBorn";
+	private static final String STARTAGE = "startAge";
+	private static final int FILE_EXTENSION = 4;
 	private static int FIRST = 0;
 	private DataType data;
 	private String title;
@@ -40,7 +49,6 @@ public class XMLParser {
 	private String randomAssign;
 	private String grid;
 	private String states;
-	private String initialStates;
 	private boolean fileFailed;
 
 	
@@ -58,7 +66,7 @@ public class XMLParser {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         String filePath = file.getAbsolutePath();
-        String fileType = filePath.substring(filePath.length()-4);
+        String fileType = filePath.substring(filePath.length()-FILE_EXTENSION);
         if(!fileType.equals(XML)) {
         		fileFailed = true;
         		return;
@@ -111,6 +119,20 @@ public class XMLParser {
 						String repro = eElement.getElementsByTagName(REPRODUCTION).item(FIRST).getTextContent();
 						String fEnergy = eElement.getElementsByTagName(ENERGYFISH).item(FIRST).getTextContent();
 						data = new WatorData(WATOR, title, width, height, sEnergy, repro, fEnergy, randomAssign, grid, states);
+					}else if(eElement.getAttribute(GAMETYPE).equals(FORAGE)) {
+						try {
+							assignTWH(eElement);
+						}catch(Exception e) {
+							fileFailed = true;
+							return;
+						}
+						String maxAnts = eElement.getElementsByTagName(MAXANTS).item(FIRST).getTextContent();
+						String diff = eElement.getElementsByTagName(DIFF).item(FIRST).getTextContent();
+						String evap = eElement.getElementsByTagName(EVAP).item(FIRST).getTextContent();
+						String phero = eElement.getElementsByTagName(PHERO).item(FIRST).getTextContent();
+						String ant = eElement.getElementsByTagName(ANTSBORN).item(FIRST).getTextContent();
+						String start = eElement.getElementsByTagName(STARTAGE).item(FIRST).getTextContent();
+						data = new ForageData(FORAGE, title, width, height, randomAssign, grid, states, maxAnts, diff, evap, phero, ant, start);
 					}
 				} catch (SAXException e) {
 					fileFailed = true;
@@ -130,7 +152,7 @@ public class XMLParser {
 		randomAssign = eElement.getElementsByTagName(RANDOMASSIGN).item(FIRST).getTextContent();
 		states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
 		grid = eElement.getElementsByTagName(GRID).item(FIRST).getTextContent();
-		if(!randomAssign.equals("True")) states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
+		if(!randomAssign.equals(TRUE)) states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
 	}
 	
 	public DataType getData() {

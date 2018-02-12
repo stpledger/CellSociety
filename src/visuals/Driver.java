@@ -1,5 +1,6 @@
 package visuals;
 
+import java.awt.Desktop;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,6 +9,8 @@ import XML.*;
 import cellsociety_team21.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -15,6 +18,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -24,20 +28,21 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Driver {
-	public static final int FRAMES_PER_SECOND = 1;
-    public static final int MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
-    public static final double SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	private double FRAMES_PER_SECOND;
+    private double MILLISECOND_DELAY;
+    private double SECOND_DELAY;
     private static final int BUTTONHEIGHT = 50;
     private static final int BUTTONHEIGHTPAD = BUTTONHEIGHT+10;
     private final static int SIZEW = 600;
     private final static int SIZEH = 600;
     private static final Color BACKGROUND = Color.ALICEBLUE;
-    private static final Color BLACK = Color.BLACK;
+    private static final Color WHITE = Color.WHITE;
     private static final String INT = "int";
     private static final String DOUBLE = "double";
     private static final String GAMEOFLIFE = "GameOfLife";
     private static final String SEGREGATION = "Segregation";
     private static final String WATOR = "Wator";
+    private static final String FORAGING = "Ants";
     private static final String FIRE = "Fire";
     private static final String MAIN = "Main";
     private static final String START = "Start";
@@ -57,6 +62,11 @@ public class Driver {
 	private static final String REPRODUCTIONTIME = "Reproduction Time:";
 	private static final String INTERROR = "Enter an integer";
 	private static final String DOUBLEERROR = "Enter a double";
+	private static final String GRIDLINE = "Toggle Grid";
+	private static final String STEP = "Step";
+	private static final String SAVESTATES = "Save";
+	private static final String FPS = "FPS: ";
+	private static final String FPSDOUBLE = "FPS: %.2f";
     private Group root;
     private Stage stage;
     private Scene scene;
@@ -70,14 +80,18 @@ public class Driver {
     private FireData fire;
     private SegregationData seg;
     private WatorData wator;
+    private ForageData forage;
     private TextField repro, sEnergy, segRatio, pFireText;
     private boolean randomAssign;
     private boolean gridLines;
     private ArrayList<String> simStates;
     private Simulation simulation;
+    private boolean dataError;
+    private boolean started;
     //TODO: add validation checking for grid values given, grid lines and speed of sim
 
 	public Driver (Stage stage, Scene scene, String gameType, DataType data) {
+		updateFrames(10);
 		this.stage = stage;
 		this.scene = scene;
 		this.gameType = gameType;
@@ -86,10 +100,13 @@ public class Driver {
 		this.randomAssign = data.isRandom();
 		this.gridLines = data.isGrid();
 		this.simStates = data.getStates();
+		this.dataError = false;
+		this.started = false;
 		if(gameType.equals(GAMEOFLIFE)) this.gol = (GoLData) data;
 		else if(gameType.equals(FIRE)) this.fire = (FireData) data;
 		else if(gameType.equals(SEGREGATION)) this.seg = (SegregationData) data;
 		else if(gameType.equals(WATOR)) this.wator = (WatorData) data;
+		else if(gameType.equals(FORAGING)) this.forage = (ForageData) data;
 		this.CELLSIZE = (SIZEH-10-3*BUTTONHEIGHTPAD)/(Math.max(width, height));
 		setUpSim();
 	}
@@ -106,7 +123,11 @@ public class Driver {
 		temp.setLayoutY(y);
 		return temp;
 	}
-	
+	private void updateFrames(double fps) {
+		FRAMES_PER_SECOND = fps;
+		MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
+		SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
+	}
 	private void setUpSim() {
 		pause = false;
 		root = new Group();
@@ -118,13 +139,36 @@ public class Driver {
 		Button stop = (Button) nodeMaker(STOP, 0, BUTTONHEIGHT*2, BUTTON);
 		Button reset = (Button) nodeMaker(RESET, 0, BUTTONHEIGHT*3, BUTTON);
 		Button submit = (Button) nodeMaker(SUBMIT, 0, BUTTONHEIGHT*4, BUTTON);
+		Button gridLINES = (Button) nodeMaker(GRIDLINE, BUTTONHEIGHT, 0, BUTTON);
+		Button steps = (Button) nodeMaker(STEP, BUTTONHEIGHT, BUTTONHEIGHT, BUTTON);
 		Text col = (Text) nodeMaker(COLUMNS, 0, BUTTONHEIGHT*5, TEXT);
+		Button getSettings = (Button) nodeMaker(SAVESTATES, BUTTONHEIGHT, BUTTONHEIGHT*2, BUTTON);
+		Slider slider = new Slider();
+		Text sliderLabel = (Text) nodeMaker(FPS+ Double.toString(slider.getValue()), BUTTONHEIGHT*5, BUTTONHEIGHT*1.25, TEXT);
+		slider.valueProperty().addListener(new ChangeListener<Number>() {
+			public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+				sliderLabel.setText(String.format(FPSDOUBLE, new_val));
+				updateFrames(new_val.doubleValue());
+				if(pause || !started) return;
+				animationFrame();
+			}
+		});
+		slider.setMin(1);
+		slider.setMax(80);
+		slider.setValue(20);
+		slider.setShowTickLabels(true);
+		slider.setShowTickMarks(true);
+		slider.setMajorTickUnit(40);
+		slider.setMinorTickCount(4);
+		slider.setBlockIncrement(10);
+		slider.setLayoutX(BUTTONHEIGHT*2);
+		slider.setLayoutY(BUTTONHEIGHT);
 		TextField widthText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*5), TEXTFIELD);
 		widthText.setText(Integer.toString(width));
 		Text row = (Text) nodeMaker(ROWS, 0, BUTTONHEIGHT*6, TEXT);
 		TextField heightText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*6), TEXTFIELD);
 		heightText.setText(Integer.toString(height));
-		root.getChildren().addAll(mainMenu, start, stop, reset, submit, col, row, widthText, heightText);
+		root.getChildren().addAll(slider, sliderLabel, mainMenu, start, stop, reset, submit, col, row, widthText, heightText, gridLINES, steps, getSettings);
 		if(gameType.equals(FIRE)) {
 			Text pFire = (Text) nodeMaker(PFIRE, 0, BUTTONHEIGHT*7, TEXT);
 			pFireText = (TextField) nodeMaker(EMPTY, 0, 10+(BUTTONHEIGHT*7), TEXTFIELD);
@@ -147,27 +191,30 @@ public class Driver {
 			root.getChildren().addAll(startE, sEnergy, reproT, repro);
 		}
 		initGrid();
+		steps.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				pause = false;
+				step(SECOND_DELAY);
+				pause = true;
+			}
+		});
+		gridLINES.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				gridLines = !gridLines;
+				toggleGrid();
+				pause = true;
+			}
+		});
 		mainMenu.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				if(animation!=null)animation.stop();
-				Gui restart = new Gui(stage);
-				Scene scene = restart.getScene();
-				stage.setScene(scene);
-				stage.show();
+				returnMain();
 			}
 		});
 		start.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
 				pause = false;
-				KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
-						e -> step(SECOND_DELAY));
-				if(animation!=null) {
-					animation.stop();
-				}
-				animation = new Timeline();
-				animation.setCycleCount(Timeline.INDEFINITE);
-				animation.getKeyFrames().add(frame);
-				animation.play();
+				started = true;
+				animationFrame();
 			}
 		});
 		submit.setOnAction(new EventHandler<ActionEvent>() {
@@ -199,12 +246,37 @@ public class Driver {
 				}
 				if(gameType.equals(WATOR)) {
 					if(isParsable(sEnergy.getText(), INT)) wator.setStartEnergy(Integer.parseInt(sEnergy.getText()));
-					else sEnergy.setText(INTERROR);
+					else {
+						sEnergy.setText(INTERROR);
+						return;
+					}
 					if(isParsable(repro.getText(), INT)) wator.setReproduction(Integer.parseInt(repro.getText()));
-					else repro.setText(INTERROR);
+					else {
+						repro.setText(INTERROR);
+						return;
+					}
 				}
 				setUpSim();
 				pause = true;
+			}
+		});
+		getSettings.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				XMLSaver save;
+				if(gameType.equals(FIRE)) {
+					save = new XMLSaver(fire, grid, gridLines, width, height);
+				}
+				else if(gameType.equals(SEGREGATION)) {
+					save = new XMLSaver(seg, grid, gridLines, width, height);
+				}
+				else if(gameType.equals(WATOR)) {
+					save = new XMLSaver(wator, grid, gridLines, width, height);
+				}else {
+					save = new XMLSaver(gol, grid, gridLines, width, height);
+				}
+				if (!save.isSaved()) {
+					System.out.println("GG");
+				}
 			}
 		});
 		stop.setOnAction(new EventHandler<ActionEvent>() {
@@ -218,6 +290,33 @@ public class Driver {
 				pause = true;
 			}
 		});
+	}
+	private void animationFrame() {
+		KeyFrame frame = new KeyFrame(Duration.millis(MILLISECOND_DELAY),
+				e -> step(SECOND_DELAY));
+		if(animation!=null) {
+			animation.stop();
+		}
+		animation = new Timeline();
+		animation.setCycleCount(Timeline.INDEFINITE);
+		animation.getKeyFrames().add(frame);
+		animation.play();
+	}
+	private void returnMain() {
+		if(animation!=null)animation.stop();
+		Gui restart = new Gui(stage, dataError);
+		dataError = false;
+		Scene scene = restart.getScene();
+		stage.setScene(scene);
+		stage.show();
+	}
+	private void toggleGrid() {
+		HashMap<Point, Cell> map = grid.getCellMap();
+		for(Point p: map.keySet()) {
+			Shape temp = map.get(p).getShape();
+			if(gridLines) temp.setStroke(WHITE);
+			else temp.setStroke(null);
+		}
 	}
 	private boolean isParsable(String tester, String type) {
 		boolean parsable = true;
@@ -241,6 +340,8 @@ public class Driver {
 			simulation = new GOLSimulation();
 		}else if(gameType.equals(FIRE)) {
 			simulation = new FireSimulation(fire.getProbCatch());
+		}else if(gameType.equals(FORAGING)) {
+			simulation = new ForagingSimulation(forage.getMaxAnts(), forage.getDiff(), forage.getEvap(), forage.getPhero(), forage.getAntsBorn(), forage.getStartAge());
 		}else if(gameType.equals(SEGREGATION)) {
 			simulation = new SegregationSimulation(seg.getRatio());
 		}else {
@@ -263,11 +364,12 @@ public class Driver {
 			Shape temp = map.get(c).getShape();
 			temp.setLayoutX(map.get(c).getX()+10+2*BUTTONHEIGHTPAD);
 			temp.setLayoutY(map.get(c).getY()+2*BUTTONHEIGHT);
-			if(gridLines) temp.setStroke(BLACK);
 			root.getChildren().add(temp);
 		}
+		toggleGrid();
 	}
 	private ArrayList<String> initializeStates(ArrayList<String> init) {
+		if(!validateStates(simStates, simulation.getStates())) returnMain();
 		if(randomAssign) {
 			for(int i=0;i<=width*height;i++) {
 				int temp = (int)(Math.random()*simStates.size());
@@ -278,7 +380,7 @@ public class Driver {
 		else {
 			init = simStates;
 			if(simStates.size()<width*height) {
-				ArrayList<String> diffStates = simulation.getStates();//should use a proper holder of all simulation states
+				ArrayList<String> diffStates = simulation.getStates();
 				for(int i=simStates.size();i<=width*height;i++) {
 					int temp = (int)(Math.random()*diffStates.size());
 					init.add(diffStates.get(temp));
@@ -288,6 +390,12 @@ public class Driver {
 		}
 	}
 
+	private boolean validateStates(ArrayList<String> states, ArrayList<String> properStates) {
+		boolean results = properStates.containsAll(states);
+		dataError = !results;
+		return results;
+	}
+	
 	private void step(double secondDelay) {
 		if(pause)return;	 
 		simulation.updateGrid(grid);

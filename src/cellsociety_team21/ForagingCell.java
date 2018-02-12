@@ -10,7 +10,7 @@ import javafx.scene.shape.Shape;
 
 public class ForagingCell extends BasicCell {
 
-	ForagingCell(Shape shape, String initState, int x, int y, int numAnts) {
+	ForagingCell(Shape shape, String initState, int x, int y) {
 		super(shape, initState, x, y);
 		myCurrentAnts = new ArrayList<Ant>();
 		myNextAnts = new ArrayList<Ant>();
@@ -72,7 +72,7 @@ public class ForagingCell extends BasicCell {
 	@Override
 	protected void setColor(Paint color){
 		super.setColor(color);
-		if(this.getCurrentState().equals("ground")) {
+		if(this.getCurrentState().equals("GROUND")) {
 			this.getShape().setOpacity(this.getCurrentAnts().size()*10);
 		}
 	}
