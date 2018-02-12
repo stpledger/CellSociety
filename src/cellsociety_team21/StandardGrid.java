@@ -57,7 +57,7 @@ public class StandardGrid extends Grid{
 	public void assignNeighborsNoDiag(){
 		for (Point myPoint : cellMap.keySet()){
 			//ArrayList<Cell> neighbors = new ArrayList<Cell>();
-			for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i++){
+			/*for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i++){
 				for (int j = (int) myPoint.getY() - 1; j < (int) myPoint.getY() + 2; j++){
 					Point neighborsPoint = new Point(i, j);
 					if (cellMap.containsKey(neighborsPoint) && !neighborsPoint.equals(myPoint) && 
@@ -65,7 +65,8 @@ public class StandardGrid extends Grid{
 						cellMap.get(myPoint).addNeighbor(cellMap.get(new Point(i,j)));
 					}
 				}
-			}
+			}*/
+			
 			//cellMap.get(myPoint).setNeighbors(neighbors);
 		}
 	}
