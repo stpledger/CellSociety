@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.sun.corba.se.spi.orbutil.fsm.Guard.Result;
-
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 
@@ -61,16 +59,6 @@ public class StandardGrid extends Grid{
 	
 	public void assignNeighborsNoDiag(){
 		for (Point myPoint : cellMap.keySet()){
-			//ArrayList<Cell> neighbors = new ArrayList<Cell>();
-			/*for (int i = (int) myPoint.getX() - 1; i < (int) myPoint.getX() + 2; i++){
-				for (int j = (int) myPoint.getY() - 1; j < (int) myPoint.getY() + 2; j++){
-					Point neighborsPoint = new Point(i, j);
-					if (cellMap.containsKey(neighborsPoint) && !neighborsPoint.equals(myPoint) && 
-							(myPoint.getX() == neighborsPoint.getX() || myPoint.getY() == neighborsPoint.getY())){
-						cellMap.get(myPoint).addNeighbor(cellMap.get(new Point(i,j)));
-					}
-				}
-			}*/
 			int x = (int) myPoint.getX();
 			int y = (int) myPoint.getY();
 			if (getCellMap().containsKey(new Point(x, y-1))){
@@ -85,7 +73,6 @@ public class StandardGrid extends Grid{
 			if (getCellMap().containsKey(new Point(x-1, y))){
 				getCellMap().get(myPoint).addNeighbor("north",getCellMap().get(new Point(x-1, y)));
 			}
-			//cellMap.get(myPoint).setNeighbors(neighbors);
 		}
 	}
 }
