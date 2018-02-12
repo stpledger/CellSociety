@@ -14,7 +14,7 @@ public class MainDriver extends Application{
 	}
 	@Override
 	public void start(Stage stage) throws Exception {
-		Gui init = new Gui(stage);
+		Gui init = new Gui(stage, false);
 		Scene scene = init.getScene();
 		stage.setTitle(TITLE);
         stage.setScene(scene);

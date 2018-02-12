@@ -32,6 +32,8 @@ public class XMLParser {
 	private static final String RANDOMASSIGN = "randomAssign";
 	private static final String GRID = "grid";
 	private static final String STATES = "states";
+	private static final String TRUE = "True";
+	private static final int FILE_EXTENSION = 4;
 	private static int FIRST = 0;
 	private DataType data;
 	private String title;
@@ -40,7 +42,6 @@ public class XMLParser {
 	private String randomAssign;
 	private String grid;
 	private String states;
-	private String initialStates;
 	private boolean fileFailed;
 
 	
@@ -58,7 +59,7 @@ public class XMLParser {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
         String filePath = file.getAbsolutePath();
-        String fileType = filePath.substring(filePath.length()-4);
+        String fileType = filePath.substring(filePath.length()-FILE_EXTENSION);
         if(!fileType.equals(XML)) {
         		fileFailed = true;
         		return;
@@ -130,7 +131,7 @@ public class XMLParser {
 		randomAssign = eElement.getElementsByTagName(RANDOMASSIGN).item(FIRST).getTextContent();
 		states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
 		grid = eElement.getElementsByTagName(GRID).item(FIRST).getTextContent();
-		if(!randomAssign.equals("True")) states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
+		if(!randomAssign.equals(TRUE)) states = eElement.getElementsByTagName(STATES).item(FIRST).getTextContent();
 	}
 	
 	public DataType getData() {
