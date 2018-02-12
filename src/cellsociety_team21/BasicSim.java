@@ -32,10 +32,10 @@ public abstract class BasicSim implements Simulation {
 	 */
 	public void updateGrid(Grid grid) {
 		for(Cell cell : grid.getCells()) {
-			cell.assignNextState(grid.getCells(), this);;
+			cell.assignNextState(grid.getCells(), this);
 		}
 		for(Cell cell : grid.getCells()) {
-			cell.switchState(this.getStateColors());;
+			cell.switchState(this.getStateColors());
 		}
 	}
 
