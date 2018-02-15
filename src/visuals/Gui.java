@@ -18,6 +18,12 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * This class sets up the main menu for the User to interact with. It sets up the splash screen.
+ * 
+ * @author Harry Wang
+ */
+
 public class Gui {
 	private Scene scene;
 	private Stage stage;
@@ -77,6 +83,9 @@ public class Gui {
 	    });
 	}
 
+	/*
+	 * Since multiple node objects were to be created, it was simpler to abstract it into a separate method
+	 */
 	private Node nodeMaker(String text, double x, double y, String type) {
 		Node temp;
 		if(type.equals(BUTTON)) temp = new Button(text);
@@ -89,6 +98,10 @@ public class Gui {
 		temp.setLayoutY(y);
 		return temp;
 	}
+	/*
+	 * Once a file has been passed, it will be attempted to be read by the XMLParser class. If the file fails to be parsed the function returns
+	 * and an error is displayed on the Gui.
+	 */
 	private void openFile(File file) {
         parsed = new XMLParser(file);
         if(parsed.isFailed()) {

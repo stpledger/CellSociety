@@ -2,7 +2,6 @@ package XML;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.DocumentBuilder;
@@ -11,6 +10,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
+
+/**
+ * This class handles all the XML parsing. For each simulation's XML, it reads in the data and assigns it accordingly to a DataType
+ * 
+ * @author Harry Wang
+ */
 
 public class XMLParser {
 	private File file;
@@ -61,7 +66,10 @@ public class XMLParser {
 			fileFailed = true;
 		} 
 	}
-
+	
+	/*
+	 * This open's the file and tries to assign all the attributes to a DataType extension
+	 */
 	private void openFile(File file) throws ParserConfigurationException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -145,6 +153,9 @@ public class XMLParser {
 		}
 	}
 	
+	/*
+	 * Since all the simulations and DataType extensions have these elements in common, I abstracted this out into a separate function
+	 */
 	public void assignTWH(Element eElement){
 		title = eElement.getElementsByTagName(TITLE).item(FIRST).getTextContent();
 		width = eElement.getElementsByTagName(WIDTH).item(FIRST).getTextContent();
