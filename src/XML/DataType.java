@@ -3,6 +3,12 @@ package XML;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * An abstract class that is extended when the data from an XML file is read.
+ * 
+ * @author Harry Wang
+ */
+
 public abstract class DataType {
 	private String GameType;
 	private String TITLE;
@@ -65,6 +71,10 @@ public abstract class DataType {
 	public ArrayList<String> getStates(){
 		return states;
 	}
+	
+	/*
+	 * In case null values are passed, the init will automatically fill the grid with default values 
+	 */
 	public void init(String SetW, String SetH) {
 		if(SetW.equals(EMPTY) && SetH.equals(EMPTY)) {
 			setWidth(DEFAULT);

@@ -1,5 +1,9 @@
 package XML;
-
+/**
+ * An extension of DataType for the Predator-Prey simulation
+ * 
+ * @author Harry Wang
+ */
 public class WatorData extends DataType{
 	private int startEnergy;
 	private int reproduction;

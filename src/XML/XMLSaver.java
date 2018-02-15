@@ -15,6 +15,12 @@ import java.util.HashMap;
 
 import cellsociety_team21.*;
 
+/**
+ * A class that saves the current state of the simulation into an XML file
+ * 
+ * @author Harry Wang
+ */
+
 public class XMLSaver {
     private FireData fire;
     private SegregationData seg;
@@ -43,6 +49,9 @@ public class XMLSaver {
 	private static final String USER = "user.dir";
 	private static final String XML = ".xml";
     
+	/*
+	 * This was one of the file features I was implementing before the deadline so in an effort to finish, I stuck everything within the constructor.
+	 */
 	public XMLSaver(DataType data, StandardGrid grid, boolean gridLines, int width, int height) {
 		SAVED = false;
 		try {

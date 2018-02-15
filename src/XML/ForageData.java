@@ -1,5 +1,11 @@
 package XML;
 
+/**
+ * An extension of DataType for the Foraging Ants simulation
+ * 
+ * @author Harry Wang
+ */
+
 public class ForageData extends DataType{
 	private int maxAnts;
 	private double diff;

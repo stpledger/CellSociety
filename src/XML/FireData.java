@@ -1,5 +1,9 @@
 package XML;
-
+/**
+ * An extension of DataType for the Spreading Fire simulation
+ * 
+ * @author Harry Wang
+ */
 public class FireData extends DataType {
 	private double fireCatch;
 

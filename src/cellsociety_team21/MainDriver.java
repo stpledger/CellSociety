@@ -6,6 +6,12 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * The Main Driver of the simulation. It instatiates a new simulation through the Gui class.
+ * 
+ * @author Harry Wang
+ */
+
 public class MainDriver extends Application{
 	private static final String TITLE = "Cell Society Team 21";
 	

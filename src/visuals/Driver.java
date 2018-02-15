@@ -27,6 +27,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * The Driver class sets up the simulations that are run.
+ * 
+ * @author Harry Wang
+ */
+
 public class Driver {
 	private double FRAMES_PER_SECOND;
     private double MILLISECOND_DELAY;
@@ -88,7 +94,7 @@ public class Driver {
     private Simulation simulation;
     private boolean dataError;
     private boolean started;
-    //TODO: add validation checking for grid values given, grid lines and speed of sim
+    
 
 	public Driver (Stage stage, Scene scene, String gameType, DataType data) {
 		updateFrames(10);
@@ -123,11 +129,18 @@ public class Driver {
 		temp.setLayoutY(y);
 		return temp;
 	}
+	/*
+	 * This function allows the speed of the simulation to be changed
+	 */
 	private void updateFrames(double fps) {
 		FRAMES_PER_SECOND = fps;
 		MILLISECOND_DELAY = 1000 / FRAMES_PER_SECOND;
 		SECOND_DELAY = 1.0 / FRAMES_PER_SECOND;
 	}
+	/*
+	 * Sets up all the UI functionality as well as allowing the User to interact with the simulation
+	 * by changing the speed, grid size, and any specific simulation settings. i.e. Probabiliy of catching fire for the spreading fire sim.
+	 */
 	private void setUpSim() {
 		pause = false;
 		root = new Group();
@@ -318,6 +331,9 @@ public class Driver {
 			else temp.setStroke(null);
 		}
 	}
+	/*
+	 * Function that checks to see if the input given by the User is parsable to dynamically change the grid
+	 */
 	private boolean isParsable(String tester, String type) {
 		boolean parsable = true;
 		if(type.equals(INT)) {
@@ -335,6 +351,9 @@ public class Driver {
 		}
 		return parsable;
 	}
+	/*
+	 * Initializes the grid depending on which simulation is running
+	 */
 	private void initGrid() {
 		if(gameType.equals(GAMEOFLIFE)) {
 			simulation = new GOLSimulation();
@@ -359,6 +378,9 @@ public class Driver {
 		}
 		setUpGridVisuals(grid.getCellMap());
 	}
+	/*
+	 * Adds all the cells into the visuals of the grid
+	 */
 	private void setUpGridVisuals(HashMap<Point, Cell> map) {
 		for(Point c: map.keySet()) {
 			Shape temp = map.get(c).getShape();
@@ -368,6 +390,9 @@ public class Driver {
 		}
 		toggleGrid();
 	}
+	/*
+	 * Initializes the beginning states of the simulation. If the states aren't given, it will randomly assign states.
+	 */
 	private ArrayList<String> initializeStates(ArrayList<String> init) {
 		if(!validateStates(simStates, simulation.getStates())) returnMain();
 		if(randomAssign) {
@@ -389,7 +414,9 @@ public class Driver {
 			return init;
 		}
 	}
-
+	/*
+	 * Checks if the states given are valid ones of the simulation. If not, it will redirect to the main menu with an error on the GUI.
+	 */
 	private boolean validateStates(ArrayList<String> states, ArrayList<String> properStates) {
 		boolean results = properStates.containsAll(states);
 		dataError = !results;
